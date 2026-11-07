@@ -1,0 +1,33 @@
+export default {
+  extends: ["@commitlint/config-conventional"],
+  rules: {
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "backend",
+        "frontend",
+        "mobile",
+        "tokens",
+        "docs",
+        "infra",
+        "ci",
+        "tenant",
+        "identity",
+        "audit",
+        "organization",
+        "workforce",
+        "verification",
+        "compliance",
+        "payroll",
+        "attendance",
+        "billing",
+        "web-channel",
+        "mobile-channel",
+        "deps",
+      ],
+    ],
+    "subject-case": [2, "never", ["start-case", "pascal-case", "upper-case"]],
+    "body-max-line-length": [1, "always", 120],
+  },
+};

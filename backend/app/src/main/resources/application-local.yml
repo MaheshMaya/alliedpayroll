@@ -1,0 +1,8 @@
+alliedpayroll:
+  seed:
+    demo-tenants: true
+
+logging:
+  level:
+    com.alliedpayroll: DEBUG
+    org.springframework.security: INFO

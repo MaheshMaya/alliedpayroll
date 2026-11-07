@@ -1,0 +1,38 @@
+{
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "rpi@skills": true,
+    "show-me@skills": true,
+    "antislop@anti-slop": true
+  },
+  "extraKnownMarketplaces": {
+    "skills": {
+      "source": {
+        "source": "github",
+        "repo": "humanlayer/skills"
+      }
+    },
+    "anti-slop": {
+      "source": {
+        "source": "github",
+        "repo": "miqdadbadjuber/anti-slop"
+      }
+    }
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/verify.sh",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}

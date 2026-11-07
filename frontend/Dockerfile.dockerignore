@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+**/storybook-static
+**/coverage
+**/playwright-report
+**/test-results
+**/.env
+**/.env.*
+!**/.env.example
+backend
+mobile
+docs
+reference
+.git
+.agents
+.claude

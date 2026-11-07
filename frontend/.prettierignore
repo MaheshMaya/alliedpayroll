@@ -1,0 +1,8 @@
+dist
+storybook-static
+coverage
+playwright-report
+test-results
+node_modules
+src/route-tree.gen.ts
+pnpm-lock.yaml

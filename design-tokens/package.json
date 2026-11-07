@@ -1,0 +1,25 @@
+{
+  "name": "@alliedpayroll/design-tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Allied DS design tokens (DTCG source) and their generated CSS variables, Tailwind theme and flat JSON",
+  "type": "module",
+  "exports": {
+    "./tokens.json": "./tokens.json",
+    "./tokens.css": "./build/css/tokens.css",
+    "./theme.css": "./build/tailwind/theme.css",
+    "./theme-keys.json": "./build/tailwind/theme-keys.json",
+    "./tokens.flat.json": "./build/json/tokens.flat.json"
+  },
+  "files": [
+    "tokens.json",
+    "build"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check"
+  },
+  "devDependencies": {
+    "style-dictionary": "5.8.0"
+  }
+}

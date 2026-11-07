@@ -1,0 +1,57 @@
+package com.alliedpayroll.tenant.application;
+
+import com.alliedpayroll.platform.core.error.NotFoundException;
+import com.alliedpayroll.platform.security.AuthenticatedUser;
+import com.alliedpayroll.platform.security.CurrentUserProvider;
+import com.alliedpayroll.platform.tenancy.TenantContext;
+import com.alliedpayroll.tenant.api.Bootstrap;
+import com.alliedpayroll.tenant.api.BootstrapService;
+import com.alliedpayroll.tenant.api.TenantSummary;
+import com.alliedpayroll.tenant.domain.Tenant;
+import com.alliedpayroll.tenant.domain.TenantRepository;
+import java.util.Map;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional(readOnly = true)
+class BootstrapUseCase implements BootstrapService {
+
+  private final TenantRepository tenants;
+  private final FeatureFlags featureFlags;
+  private final CurrentUserProvider users;
+
+  BootstrapUseCase(TenantRepository tenants, FeatureFlags featureFlags, CurrentUserProvider users) {
+    this.tenants = tenants;
+    this.featureFlags = featureFlags;
+    this.users = users;
+  }
+
+  @Override
+  public Bootstrap forCurrentUser() {
+    var current = TenantContext.require();
+    Tenant tenant =
+        tenants
+            .findById(current.id())
+            .filter(Tenant::isActive)
+            .orElseThrow(() -> NotFoundException.of("tenant", current.slug()));
+    AuthenticatedUser user = users.require();
+    Map<String, Boolean> features = featureFlags.enabledFor(tenant.id());
+    return new Bootstrap(
+        summaryOf(tenant),
+        new Bootstrap.User(user.subject(), user.displayName(), user.email()),
+        user.permissions(),
+        features);
+  }
+
+  static TenantSummary summaryOf(Tenant tenant) {
+    return new TenantSummary(
+        tenant.id().value(),
+        tenant.slug(),
+        tenant.name(),
+        tenant.industryProfileCode(),
+        tenant.defaultLocale(),
+        tenant.enabledLocales(),
+        tenant.timezone());
+  }
+}

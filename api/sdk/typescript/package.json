@@ -1,0 +1,40 @@
+{
+  "name": "@alliedpayroll/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "TypeScript SDK generated from api/openapi/backend.json. Never edited by hand.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react-query": {
+      "types": "./dist/@tanstack/react-query.gen.d.ts",
+      "import": "./dist/@tanstack/react-query.gen.js"
+    },
+    "./client": {
+      "types": "./dist/client.gen.d.ts",
+      "import": "./dist/client.gen.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate": "openapi-ts",
+    "build": "tsc -p tsconfig.json",
+    "check": "pnpm build"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.107.1"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
+    "@tanstack/react-query": "5.107.1",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3"
+  }
+}

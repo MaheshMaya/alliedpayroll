@@ -1,0 +1,525 @@
+{
+  "runId": "allied-foundations-v1",
+  "fileKey": "rTrXnvXxmDkh1xO8SBMRh3",
+  "fileUrl": "https://www.figma.com/design/rTrXnvXxmDkh1xO8SBMRh3",
+  "scope": "tokens-foundations",
+  "entities": {
+    "collections": {
+      "Primitives": "VariableCollectionId:2:2",
+      "Dimension": "VariableCollectionId:2:57",
+      "Brand": "VariableCollectionId:2:76",
+      "Color": "VariableCollectionId:2:81",
+      "Density": "VariableCollectionId:2:124",
+      "Layout": "VariableCollectionId:2:131",
+      "Script": "VariableCollectionId:2:136"
+    },
+    "variableCounts": {
+      "Primitives": 54,
+      "Dimension": 18,
+      "Brand": 4,
+      "Color": 42,
+      "Density": 6,
+      "Layout": 4,
+      "Script": 22
+    },
+    "pages": {
+      "Cover": "0:1",
+      "Changelog": "2:189",
+      "Color": "2:190",
+      "Typography": "2:191",
+      "Spacing & Layout": "2:192",
+      "Radius & Elevation": "2:193",
+      "Motion": "2:194",
+      "Iconography": "2:195",
+      "Accessibility": "2:196",
+      "Brand & White-label": "2:197"
+    },
+    "frames": {
+      "cover": "2:198",
+      "colorLight": "2:219",
+      "colorDark": "2:353",
+      "brandAccents": "2:487",
+      "typeLatin": "2:524",
+      "typeIndic": "2:589"
+    },
+    "styles": {
+      "text": 21,
+      "effect": 3,
+      "grid": 6
+    }
+  },
+  "completedSteps": [
+    "discovery",
+    "variables",
+    "text-styles",
+    "effect-styles",
+    "grid-styles",
+    "pages+cover",
+    "color-specimen",
+    "type-specimen",
+    "validate",
+    "contrast-audit",
+    "contrast-fixes",
+    "foundations-published",
+    "bg/selected aliased to accent/subtle (needs republish)",
+    "week3: helpers promoted to libraries; product files on latest library versions",
+    "week4: screens 8-11 built (00 Sign in, 06 Setup, 07 Clients & sites, import on 03 People); prototype flows wired",
+    "week4: all 7 onboarding steps + supervisor reliever flow built and wired",
+    "responsive: 9 tablet (1024) + 10 phone (390) frames for screens 1-11; rules in FIGMA_DESIGN_SPEC 5.4",
+    "dev annotations (55) + all remaining tablet/phone frames for screens 8-11"
+  ],
+  "next": [
+    "native Tamil review",
+    "run usability test per docs/design/USABILITY_TEST_PLAN.md",
+    "mark screens Ready for dev after the test"
+  ],
+  "webComponents": {
+    "fileKey": "yw6iyjD8ZhRZnsyat5VPEh",
+    "foundationsLibraryKey": "lk-37519089e668095a140933bdbf4766691b0712ade1c9d5801761edb93e1c22782b48bbfe1dd34c407a700693957852021527a840ea53e578dbba3675a7892e17",
+    "pages": {
+      "Cover": "0:1",
+      "Changelog": "1:2",
+      "Getting started": "1:3",
+      "Icons": "1:4",
+      "Actions": "1:5",
+      "Inputs": "1:6",
+      "Selection": "1:7",
+      "Navigation": "1:8",
+      "Data display": "1:9",
+      "Data table": "1:10",
+      "Feedback": "1:11",
+      "Overlays": "1:12",
+      "Domain": "1:13",
+      "Patterns": "1:14",
+      "Templates": "1:15",
+      "Deprecated": "1:16"
+    },
+    "components": {
+      "Button": "2:723",
+      "Icon Button": "2:1003",
+      "Text Field": "3:215",
+      "Money Input": "3:234",
+      "Search Field": "3:253",
+      "Checkbox": "4:91",
+      "Radio": "4:142",
+      "Switch": "4:193",
+      "Status Badge": "5:65",
+      "KPI Tile": "5:87",
+      "Masked Value": "5:104",
+      "Avatar": "5:129",
+      "Empty State": "5:167",
+      "Table Header Cell": "6:44",
+      "Table Cell": "6:75",
+      "Table Row": "6:212",
+      "Filter Chip": "6:227",
+      "Bulk Action Bar": "6:228",
+      "Attendance Grid Cell": "6:311",
+      "Side Nav Item": "7:85",
+      "Context Chip": "7:111",
+      "Global Context Bar": "7:112",
+      "Tab": "7:154",
+      "Tabs": "7:155",
+      "Alert": "8:51",
+      "Toast": "8:80",
+      "Dialog": "9:90",
+      "Drawer / Explain Panel": "9:91",
+      "Phone Header": "24:70",
+      "Side Nav Rail": "24:365"
+    },
+    "completedSteps": [
+      "pages",
+      "icons",
+      "actions",
+      "inputs",
+      "selection",
+      "data-display",
+      "data-table",
+      "navigation",
+      "feedback",
+      "overlays",
+      "theme-check",
+      "cover"
+    ],
+    "icons": {
+      "Plus": "1:25",
+      "X": "1:29",
+      "Check": "1:32",
+      "Chevron Down": "1:35",
+      "Chevron Right": "1:38",
+      "Search": "1:42",
+      "Filter": "1:45",
+      "Calendar": "1:51",
+      "Info": "1:56",
+      "Triangle Alert": "1:61",
+      "Circle Check": "1:65",
+      "Circle X": "1:70",
+      "Ellipsis": "1:75",
+      "House": "1:79",
+      "Users": "1:85",
+      "Clock": "1:89",
+      "Wallet": "1:94",
+      "Arrow Up Right": "1:98",
+      "Arrow Down Right": "1:102",
+      "Loader Circle": "1:105",
+      "Eye": "1:109",
+      "Map Pin": "1:113",
+      "Lock": "1:117",
+      "Inbox": "1:121",
+      "Menu": "23:303"
+    },
+    "frames": {
+      "cover": "11:532",
+      "themeCheckLight": "10:5",
+      "themeCheckDark": "10:296"
+    },
+    "publishedKeys": {
+      "icons": {
+        "Plus": "ea2d01a5c0737f54836e4334dea501d428a6f762",
+        "X": "17c7d4bfc9ce264f11ccbb8de2aeeb3af29935d7",
+        "Check": "243f1deca6552b9abdd7ca574bb9d4be50ac0810",
+        "Chevron Down": "a92ca2564ff355ef4143f7c4c384ad7b73bc3a2a",
+        "Chevron Right": "326c2afdd8c4f3a190090f332eac58011850ec17",
+        "Search": "92d72cfebab00aad0ee32df218de55883d2691ae",
+        "Filter": "4f6e97249b5be615577a8666159f2b9109e938e4",
+        "Calendar": "aa4fbcb6336dfa057657c94c7283026b7cc77e29",
+        "Info": "981b3a56614207ffca7a26b49fe63497652fc170",
+        "Triangle Alert": "5a045dd9748e6fb0a3ccbd3cc48fea42838aa0cb",
+        "Circle Check": "1198e3fc0ac4a4bd6e0d369b52ef586dd2c11643",
+        "Circle X": "67fe86bfeb7a375baa572d663bff551d5d29b1b1",
+        "Ellipsis": "e001e1a501feeae4fae3ad60bddc48b7e72767ec",
+        "House": "8add5a6dbf42ed110d6ee016c397c8eea0b624da",
+        "Users": "ae25672a8f7313c6a69eacdb13414adab5e5fb86",
+        "Clock": "d0b1aa74515a4e326f6ac437da2edc82603fc08a",
+        "Wallet": "14c67ee31cdbe3aac84e2ed5abcd79c1695eccc9",
+        "Arrow Up Right": "888d5a30d320b5bc7efc37560385d42d03a4876b",
+        "Arrow Down Right": "4dd6b09e56a5ad9f2677a141463e576a77c42785",
+        "Loader Circle": "51c3b5be0641996da1de282aaa3f2ab8ea7a3998",
+        "Eye": "56fda6cd7ae061ded18261564b5844e603d540f7",
+        "Map Pin": "c4bfd36262ff07dd705c6b83fc02d250b356f14b",
+        "Lock": "ef78e6978e1e528785e7a4577d8739eaee301437",
+        "Inbox": "e68a415ba6dfa4c1a1ca39003acdaed9837f647a"
+      },
+      "sets": {
+        "Button": "c02754e1e23d9a9dd40edeb5ea2961a8b6bc0a45",
+        "Icon Button": "c93b4c1b1f84132b0174bb1f8d61978a9305e06d",
+        "Text Field": "d9b57c6cd6159db2514a2b45b51a52bc92339e06",
+        "Money Input": "9430c8ad10b1de322a1b8fe0fb0b13164f2e36f6",
+        "Search Field": "9c52465441a78c298b0a4d5dd1553aa2b4205138",
+        "Checkbox": "350b31da8e7a96c5d180856eb1fbb70e122420f8",
+        "Radio": "701943e0dc52440cdcfa0a44d63aef8b8fc4dd16",
+        "Switch": "435c76443d114687119d103e7ec5886abc42e16a",
+        "Status Badge": "1aa534520502eaa75f484795b38557b232a52458",
+        "KPI Tile": "9ea86e362b4fd28e840898dfc19516a220d514b7",
+        "Masked Value": "8d3cbb2e6a80389308d9a12f07419af1875691d5",
+        "Avatar": "1e72b25863e3992ce04e33e11f2813a8c1e714dc",
+        "Empty State": "da3337a38e11541f642c8fbb4eafe99843167201",
+        "Table Header Cell": "4a62f1a7e431a5dc896e4a61eb155438b90f8ba2",
+        "Table Cell": "2fc2bb01946f8d9e53fccc3a60db39f0bf55956c",
+        "Table Row": "e8d0362be1d7ff72479b5741f59b0417ee68e02f",
+        "Filter Chip": "eb517b4fee7ad2e58ffcee36b8ada2385bef3423",
+        "Attendance Grid Cell": "0b7a50ae2d5dcb4a8279f1e3d12796310c85c47f",
+        "Side Nav Item": "c6db0f00dab2d5b604fc7b0a4cac648b29e2cd10",
+        "Context Chip": "5a5ea297904d34797f6a76c543f00f6d304f553e",
+        "Tab": "3f9e3e1a7d96547d1b0faefdd5383a3f44860439",
+        "Alert": "2e651c01be42fc400ac156515d75fbe36a51f900",
+        "Toast": "fa0c2b77cb819fa67b025a933bad27e039694c6c",
+        "Dialog": "220b7ea966e52171dde06d21b87ec5ad1c1ef766"
+      },
+      "components": {
+        "Bulk Action Bar": "fd3a0149ef3878bcc58105c26ca3c0c61f20d8e2",
+        "Global Context Bar": "541a6e3ca835780f46388c0356fa303f5fd4621e",
+        "Tabs": "987e31339371d0703b42aee2bc97b2aad73267df",
+        "Drawer / Explain Panel": "65c1693912bc46973891ca713fecc2244f1d80ef"
+      },
+      "Icon/Menu": "a8caa3698aa9dd42fbc9b4ddc84d6a1285b20dbc",
+      "Phone Header": "e14bf3772ed0ef3f8aff1641e7c117a45b4b9bbb",
+      "Side Nav Rail": "247843b756549415cffa7bb7ac2698ce68ddd0a7"
+    }
+  },
+  "mobileComponents": {
+    "fileKey": "MQ6CaSxdqrR9JkE0WAhuGO",
+    "pages": {
+      "Cover": "0:1",
+      "Getting started": "4:2",
+      "App chrome": "4:3",
+      "Attendance": "4:4",
+      "Home & lists": "4:5",
+      "Payslip": "4:6",
+      "Kiosk": "4:7"
+    },
+    "components": {
+      "App Bar": "4:80",
+      "Bottom Nav Item": "4:95",
+      "Bottom Navigation": "4:96",
+      "Check-in Button": "5:93",
+      "Face Capture Frame": "5:130",
+      "Check Item": "5:149",
+      "Sync Indicator": "5:170",
+      "Shortcut Tile": "6:526",
+      "List Item": "6:557",
+      "Month Chip": "6:564",
+      "Language Switch": "6:589",
+      "Payslip Hero Card": "7:28",
+      "Expandable Section": "7:85",
+      "Kiosk Result Overlay": "8:64"
+    }
+  },
+  "webPortal": {
+    "fileKey": "BopjPxgfVJL1FyElxulB4d",
+    "pages": {
+      "01 Home": "2:3",
+      "02 Month close": "2:4",
+      "03 People": "2:5",
+      "04 Time & attendance": "2:6",
+      "05 Payroll": "2:7",
+      "Local components": "2:8",
+      "00 Sign in": "11:2",
+      "06 Setup": "12:2",
+      "07 Clients & sites": "13:2"
+    },
+    "local": {
+      "Side Nav": "2:678",
+      "Attention Row": "2:774"
+    },
+    "screens": {
+      "home": "2:801",
+      "monthClose": "4:358",
+      "attendance": "5:399",
+      "payrollExplain": "6:595",
+      "payrollConfirm": "6:1102",
+      "employees": "7:379",
+      "signIn": "11:3",
+      "otpFilled": "11:180",
+      "otpError": "11:307",
+      "cantSignIn": "11:431",
+      "setupLocations": "12:3",
+      "setupBranding": "12:289",
+      "clientContract": "13:3",
+      "importValidate": "14:421",
+      "setupIndustry": "15:168",
+      "setupEntities": "15:342",
+      "setupHolidays": "16:255",
+      "setupPayStatutory": "16:662",
+      "setupInvite": "16:853"
+    },
+    "flows": {
+      "00 Sign in": [
+        "Sign in with OTP (11:3)",
+        "Can't sign in (11:431)"
+      ],
+      "03 People": [
+        "Employees -> bulk import (7:379)"
+      ],
+      "05 Payroll": [
+        "Review and approve payroll (6:595)"
+      ],
+      "06 Setup": [
+        "Tenant onboarding, 7 steps (15:168)"
+      ]
+    },
+    "tablet1024": {
+      "signIn": "20:1768",
+      "home": "19:2",
+      "monthClose": "19:336",
+      "attendance": "19:741",
+      "payrollExplain": "19:1350",
+      "employees": "20:282",
+      "importValidate": "20:816",
+      "clientContract": "20:1207",
+      "setupLocations": "20:1568",
+      "otpFilled": "26:937",
+      "otpError": "26:995",
+      "cantSignIn": "26:1053",
+      "setupIndustry": "26:2",
+      "setupEntities": "26:118",
+      "setupHolidays": "26:282",
+      "setupPayStatutory": "26:521",
+      "setupBranding": "26:647",
+      "setupInvite": "26:771"
+    },
+    "phone390": {
+      "signIn": "22:2",
+      "home": "22:115",
+      "monthClose": "22:544",
+      "attendanceDay": "23:60",
+      "payroll": "23:550",
+      "payrollExplainSheet": "23:815",
+      "employees": "24:2",
+      "importValidate": "24:165",
+      "clientContract": "24:338",
+      "setupLocations": "24:471",
+      "otpFilled": "26:1093",
+      "otpError": "26:1184",
+      "cantSignIn": "26:1276",
+      "setupIndustry": "29:2",
+      "setupEntities": "29:182",
+      "setupHolidays": "29:368",
+      "setupPayStatutory": "29:715",
+      "setupBranding": "29:905",
+      "setupInvite": "29:1096"
+    }
+  },
+  "mobileKiosk": {
+    "fileKey": "2UYGDRE7sRQ3X2G08aHzts",
+    "screens": {
+      "homeEN": "1:216",
+      "homeTA": "1:357",
+      "checkinAligning": "2:637",
+      "checkinMatched": "2:701",
+      "checkinOffline": "2:758",
+      "payslip": "2:916",
+      "supervisor": "3:634",
+      "kioskIdle": "4:176",
+      "kioskRecognised": "4:208",
+      "kioskFallback": "4:225",
+      "checkinHomeFlowCopy": "6:552",
+      "relieverChoose": "8:138",
+      "relieverAssigned": "8:294"
+    },
+    "flows": {
+      "02 Check-in": [
+        "Guard face check-in (6:552)"
+      ],
+      "05 Kiosk": [
+        "Kiosk check-in (4:176)"
+      ],
+      "04 Supervisor": [
+        "Supervisor: cover a no-show (3:634)"
+      ]
+    }
+  },
+  "libraryAdditions": {
+    "web": {
+      "Month-close Step": "18:30 key 4105bf1047acbd201a1f6d565058f11697c2e3d7",
+      "Table Cell Type=Masked": "18:167"
+    },
+    "mobile": {
+      "Kiosk Button": "13:15"
+    },
+    "fixes": [
+      "web Alert text wrap",
+      "web Explain panel wrap",
+      "mobile Shortcut Tile/List Item/Check Item wrap",
+      "mobile App Bar 1-line ellipsis",
+      "mobile Month Chip hug"
+    ]
+  },
+  "$note": "Figma build ledger: file keys, node IDs and published library keys for the Allied DS + product files. Node IDs are stable; re-run a read-only inventory if a lookup fails.",
+  "annotations": {
+    "categories": [
+      "Behaviour",
+      "Data & API",
+      "Accessibility",
+      "Language"
+    ],
+    "webDesktop": 38,
+    "mobileKiosk": 17,
+    "note": "Endpoints not in MULTI_CHANNEL_API.md are marked 'Proposed'"
+  },
+  "tasteAudit": {
+    "date": "2026-10-31",
+    "skill": ".claude/skills/design-taste",
+    "scope": "Web Portal 8 pages (≈3,400 text nodes), Mobile & Kiosk 5 pages",
+    "passed": [
+      "WCAG text contrast: 0 failures",
+      "all product-frame fills/strokes bound to variables",
+      "auto-layout spacing on 4/8 grid"
+    ],
+    "fixed": [
+      "Attention Row: fixed 96px Status slot (2:774) so titles share one left edge",
+      "Tenant logo monogram 'SG' on Side Nav + Side Nav Rail + kiosk",
+      "Payroll flagged Table Row: accent stroke excluded from layout (6:977, 6:1135, 19:1383)",
+      "Attendance legend swatches detached, codes 9.8px -> 12px",
+      "Month close: 'Unlocks when all 302 sites are ready' under disabled Run payroll (1440/1024/390)",
+      "Phone Legal entities: registrations grid matched, ESIC code full-width row",
+      "Kiosk: header text 18px (kiosk/body), language switch scaled to 64px targets",
+      "Supervisor overlines 12 -> 13px"
+    ],
+    "accepted": [
+      "Setup wizard bodies scroll under sticky footer (overflowDirection VERTICAL) - intended",
+      "Phone horizontal tab strips cut at edge - scroll affordance",
+      "Status bar padding 14 - OS chrome"
+    ]
+  },
+  "publishLog": [
+    {
+      "date": "2026-10-31",
+      "foundations": [
+        "text style mobile/overline (key 8518af0aeaf1cf4e5598a13cd54a03f97d5f7ff5)"
+      ],
+      "webComponents": [
+        "Checkbox/Radio/Switch: fixed 320 default, label+description wrap",
+        "Text Field: helper text wraps",
+        "Icon/Menu (23:303)",
+        "Phone Header (24:70)",
+        "Side Nav Rail (24:365)"
+      ],
+      "consumersUpdated": [
+        "Web Portal: Phone Header x7 and Side Nav Rail x7 swapped to library (titles/context/Active kept); local 18:2/18:320/18:321 deleted",
+        "Web Portal: 72 Switch/Radio/Text Field instances updated (57 on 06 Setup, 15 on 00 Sign in); no width changes needed",
+        "Mobile & Kiosk: mobile/overline applied to 3:659 3:688 8:146 8:150 8:302 8:306",
+        "Screenshot-verified: 22:545, 19:336, 15:168, 16:662, 8:294"
+      ]
+    }
+  ],
+  "appShellV2": {
+    "status": "built in 01 Web Components, awaiting user review (not published)",
+    "date": "2026-11-01",
+    "decisions": {
+      "rightRail": "on; per-icon show/hide setting later",
+      "statusBar": "built, OFF by default (user preference)",
+      "leftNav": "accordion groups, one open at a time",
+      "usabilityTest": "run on the new shell"
+    },
+    "components": {
+      "Side Nav": "39:265",
+      "Side Nav Group": "38:270",
+      "Side Nav Sub Item": "38:299",
+      "Utility Rail": "39:477",
+      "Utility Rail Button": "38:368",
+      "Status Bar": "39:540",
+      "Kbd": "38:211",
+      "Quick Action Row": "42:54",
+      "Notification Row": "42:109",
+      "Panel / Quick actions": "42:110",
+      "Panel / Notifications": "42:232",
+      "Shortcuts Sheet": "42:303"
+    },
+    "changed": {
+      "Global Context Bar 7:112": "spacer + Search Field 43:444 (Search or jump to…, Ctrl K)"
+    },
+    "newIcons": [
+      "Bell 34:5",
+      "History 34:10",
+      "Activity 34:13",
+      "Circle Help 34:18",
+      "Settings 34:22",
+      "Landmark 34:30",
+      "Chart Column 34:36",
+      "Package 34:42",
+      "Pin 34:46",
+      "Panel Left 34:50",
+      "Zap 34:53",
+      "Keyboard 34:64",
+      "Upload 41:6",
+      "Receipt 41:11",
+      "Banknote 41:16",
+      "Play 41:19",
+      "User Plus 41:25",
+      "Calendar Check 41:32"
+    ],
+    "reviewFrames": {
+      "A default": "44:2",
+      "B quick actions open": "44:475",
+      "C status bar on": "44:938",
+      "D shortcuts sheet": "44:1253"
+    },
+    "rolloutAfterApproval": [
+      "Rebuild Side Nav Rail 24:365 to the new top-level set (Time, Statutory, Reports, Settings)",
+      "Add Recent, Pinned, Background jobs, Activity, Help panels",
+      "User publishes Web Components",
+      "Web Portal: replace local Side Nav 2:678 with library Side Nav + Utility Rail on every 1440/1024 frame; set group open/active per page; recheck tables at 1152 content width",
+      "Prototype: wire rail panels + ? sheet; add test task: pin October paysheet and return to it"
+    ]
+  }
+}

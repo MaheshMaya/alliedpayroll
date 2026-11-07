@@ -1,0 +1,22 @@
+pre-commit:
+  parallel: true
+  commands:
+    backend-format:
+      glob: "backend/**/*.java"
+      run: cd backend && ./gradlew -q spotlessCheck
+    frontend-lint:
+      root: "frontend/"
+      glob: "*.{ts,tsx}"
+      run: pnpm exec eslint --max-warnings 0 --no-warn-ignored {staged_files}
+    frontend-format:
+      root: "frontend/"
+      glob: "*.{ts,tsx,css,json,md}"
+      run: pnpm exec prettier --check {staged_files}
+    tokens-fresh:
+      glob: "design-tokens/**/*"
+      run: pnpm --filter @alliedpayroll/design-tokens check
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}
