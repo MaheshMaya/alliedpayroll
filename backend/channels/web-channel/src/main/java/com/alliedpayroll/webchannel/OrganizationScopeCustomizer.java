@@ -26,14 +26,13 @@ class OrganizationScopeCustomizer implements Consumer<OAuth2AuthorizationRequest
 
   @Override
   public void accept(OAuth2AuthorizationRequest.Builder builder) {
-    TenantContext.current()
-        .ifPresent(tenant -> {
-          // Keycloak refuses the bare scope next to the aliased one, so the alias replaces it.
-          Set<String> scopes = new LinkedHashSet<>(configuredScopes());
-          scopes.remove(ORGANIZATION_SCOPE);
-          scopes.add(ORGANIZATION_SCOPE + ":" + tenant.slug());
-          builder.scopes(scopes);
-        });
+    // Fails closed: the authorization endpoint is never reached from a host without a tenant.
+    var tenant = TenantContext.require();
+    // Keycloak refuses the bare scope next to the aliased one, so the alias replaces it.
+    Set<String> scopes = new LinkedHashSet<>(configuredScopes());
+    scopes.remove(ORGANIZATION_SCOPE);
+    scopes.add(ORGANIZATION_SCOPE + ":" + tenant.slug());
+    builder.scopes(scopes);
   }
 
   private Set<String> configuredScopes() {

@@ -47,3 +47,4 @@ mobile/**/*.freezed.dart
 # Local browser-session captures and third-party reference screenshots stay out of git
 .playwright-mcp/
 reference/
+backend/**/bin/

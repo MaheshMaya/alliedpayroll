@@ -39,6 +39,8 @@ class AuthController {
       // Spring sends a failed callback here; answering instead of redirecting stops the loop.
       throw new SignInFailedException();
     }
+    // A host without a tenant has no organisation to sign in to and no registered redirect URI.
+    TenantContext.require();
     if (returnTo != null) {
       request
           .getSession(true)
