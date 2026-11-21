@@ -67,6 +67,7 @@ export type LoginData = {
   path?: never;
   query?: {
     return_to?: string | null;
+    error?: string | null;
   };
   url: "/auth/login";
 };
