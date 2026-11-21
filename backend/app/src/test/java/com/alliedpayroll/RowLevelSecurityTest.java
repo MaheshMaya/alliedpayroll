@@ -57,7 +57,7 @@ class RowLevelSecurityTest {
   }
 
   @Test
-  void workOutsideATenantSeesNoTenantRows() {
+  void workOutsideTenantSeesNoTenantRows() {
     String flag = "module:" + UUID.randomUUID();
     insertFlagAs(SENTINEL, flag);
 
@@ -66,7 +66,7 @@ class RowLevelSecurityTest {
   }
 
   @Test
-  void aTenantCannotWriteAnotherTenantsRow() {
+  void tenantCannotWriteAnotherTenantsRow() {
     assertThatThrownBy(() ->
             TenantTesting.runAs(
                 SENTINEL,

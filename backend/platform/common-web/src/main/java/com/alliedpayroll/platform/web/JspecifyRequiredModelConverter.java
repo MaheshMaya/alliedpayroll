@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.JavaType;
 
 /**
- * swagger-core still models types with Jackson 2 while the application runs Jackson 3, so both
+ * Swagger-core still models types with Jackson 2 while the application runs Jackson 3, so both
  * {@code JavaType}s are accepted.
  *
  * <p>The code's nullness contract becomes the API's: every record component is required unless it
@@ -60,7 +60,7 @@ public class JspecifyRequiredModelConverter implements ModelConverter {
     return properties != null && properties.containsKey(name);
   }
 
-  /** springdoc returns a reference for named models; the properties live in the context. */
+  /** Springdoc returns a reference for named models; the properties live in the context. */
   @SuppressWarnings("rawtypes")
   private static @Nullable Schema definition(Schema resolved, ModelConverterContext context) {
     String ref = resolved.get$ref();

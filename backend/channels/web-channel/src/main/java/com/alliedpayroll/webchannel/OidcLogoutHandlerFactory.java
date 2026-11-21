@@ -48,6 +48,8 @@ class OidcLogoutHandlerFactory {
   }
 
   /**
+   * Where RP-initiated logout sends the browser.
+   *
    * @param endSessionUri Keycloak's end-session endpoint for the realm
    */
   @ConfigurationProperties("alliedpayroll.oidc")
