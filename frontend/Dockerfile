@@ -1,6 +1,6 @@
 # Build from the repository root so the workspace lockfile, design-tokens and the API contract
 # are in the context:  docker build -f frontend/Dockerfile .
-FROM node:22-alpine AS build
+FROM node:26-alpine AS build
 RUN npm install -g pnpm@12.18.0
 WORKDIR /repo
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
