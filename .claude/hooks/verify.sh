@@ -27,12 +27,8 @@ run() {
 }
 
 if [ -f "backend/gradlew" ]; then
-  jdk="${ALLIED_JDK:-$HOME/.jdks/jdk-25.0.5+8}"
-  gradle_env=""
-  if [ -d "$jdk" ]; then
-    gradle_env="JAVA_HOME='$jdk' JAVA_OPTS='-Djava.net.preferIPv4Stack=true' "
-  fi
-  run "backend format check and compile"     "cd backend && ${gradle_env}./gradlew -q --console=plain spotlessCheck compileJava compileTestJava"
+  # scripts/gradle runs Gradle in the toolchain container by default; ALLIED_GRADLE=host uses the wrapper.
+  run "backend format check and compile"     "scripts/gradle -q spotlessCheck compileJava compileTestJava"
 fi
 if [ -f "api/sdk/typescript/package.json" ]; then
   run "api client build" "pnpm --filter @alliedpayroll/api-client --silent build"

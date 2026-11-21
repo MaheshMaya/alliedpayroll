@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Gradle for the backend. Default: inside the toolchain container, so the host needs only Docker.
+# ALLIED_GRADLE=host runs the wrapper on the host instead (JDK 25 on PATH or in ~/.gradle/gradle.properties).
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ "${ALLIED_GRADLE:-docker}" = "host" ]; then
+  cd "$root/backend" && exec ./gradlew "$@"
+fi
+compose_file="$root/docker-compose.yml"
+# Git Bash hands a Windows executable a POSIX path unless it is converted first.
+if command -v cygpath >/dev/null 2>&1; then compose_file="$(cygpath -m "$compose_file")"; fi
+# The container entrypoint syncs the sources into its volume and runs the wrapper there; see
+# scripts/gradle-in-container.sh. Pass --clean first to start from an empty volume.
+exec docker compose -f "$compose_file" --profile tools run --rm -T backend-tools "$@"

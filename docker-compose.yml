@@ -126,6 +126,27 @@ services:
       backend-api:
         condition: service_healthy
 
+  # Toolchain for local checks, so nothing depends on a JDK, Gradle or an IDE on the host:
+  #   scripts/gradle spotlessCheck compileJava test
+  # Sources are synced into the backend-work volume because Gradle cannot run on the Windows bind
+  # mount; Testcontainers starts sibling containers through the mounted Docker socket.
+  backend-tools:
+    profiles: [tools]
+    image: eclipse-temurin:25-jdk
+    working_dir: /work
+    entrypoint: ["bash", "/work/scripts/gradle-in-container.sh"]
+    command: ["--version"]
+    environment:
+      GRADLE_USER_HOME: /gradle-home
+      TESTCONTAINERS_RYUK_DISABLED: "true"
+    volumes:
+      - .:/work
+      - gradle-home:/gradle-home
+      - backend-work:/build
+      - /var/run/docker.sock:/var/run/docker.sock
+
 volumes:
   pgdata:
   keycloak-data:
+  gradle-home:
+  backend-work:

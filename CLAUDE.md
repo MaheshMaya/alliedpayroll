@@ -8,15 +8,17 @@ Walking skeleton in place (2026-11-07): one Spring Boot backend (`backend/`, Gra
 
 ## Build, lint, test
 
-Machine notes: JDK 25 lives in `%USERPROFILE%\.jdks\jdk-25.0.5+8` (user space; Gradle finds it through `~/.gradle/gradle.properties`). Run Gradle with `JAVA_HOME` pointing there and `JAVA_OPTS=-Djava.net.preferIPv4Stack=true` (IPv6 to GitHub's release host is broken on this network). Rancher Desktop holds host port 8080, so the API listens on 8088 (batch 8089).
+Machine notes: local checks run in Docker (Rancher Desktop with the moby engine). A host JDK 25 exists in `%USERPROFILE%\.jdks\jdk-25.0.5+8` for `ALLIED_GRADLE=host`, which also needs `JAVA_OPTS=-Djava.net.preferIPv4Stack=true` and must not run while VS Code's Gradle extension imports the project. Rancher Desktop holds host port 8080, so the API listens on 8088 (batch 8089). Files that must be executable on Linux (`gradlew`, `scripts/*`) get their bit through `git update-index --chmod=+x`; Windows checkouts do not carry it.
 
 ```sh
-# backend (from backend/)
-./gradlew spotlessApply                                   # google-java-format + ktlint
-./gradlew spotlessCheck compileJava compileTestJava       # rung 1 (the Stop hook runs this)
-./gradlew test                                            # Testcontainers PostgreSQL; needs Docker
-./gradlew :app:test --tests '*BootstrapIsolationTest*'    # one class
-./gradlew :app:bootRun --args='--spring.profiles.active=local'   # API on :8088, seeds demo tenants
+# backend: scripts/gradle runs the wrapper inside the backend-tools container (Temurin 25, sources
+# synced into a volume because Gradle's client dies on the Windows bind mount; Testcontainers through
+# the Docker socket). ALLIED_GRADLE=host runs ./gradlew on the host instead. First run: --clean.
+scripts/gradle spotlessApply                                   # google-java-format + ktlint
+scripts/gradle spotlessCheck compileJava compileTestJava       # rung 1 (the Stop hook runs this)
+scripts/gradle test                                            # Testcontainers PostgreSQL
+scripts/gradle :app:test --tests '*BootstrapIsolationTest*'    # one class
+docker compose up backend-api                                  # API on :8088 from the image, seeds demo tenants
 
 # web and tokens (from the repo root)
 pnpm install                                   # also builds the SDK (prepare)

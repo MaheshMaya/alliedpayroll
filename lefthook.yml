@@ -3,7 +3,7 @@ pre-commit:
   commands:
     backend-format:
       glob: "backend/**/*.java"
-      run: cd backend && ./gradlew -q spotlessCheck
+      run: scripts/gradle -q spotlessCheck
     frontend-lint:
       root: "frontend/"
       glob: "*.{ts,tsx}"

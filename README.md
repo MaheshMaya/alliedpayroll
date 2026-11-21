@@ -33,14 +33,14 @@ Demo tenants `sentinel` (staffing) and `nimbus-it` (IT) are seeded with one user
 ```sh
 pnpm install                          # hooks, tokens, frontend
 docker compose up postgres keycloak redis
-cd backend && ./gradlew :app:bootRun  # API on :8088
+scripts/gradle test                   # backend checks in the toolchain container
 pnpm web dev                          # web on :5173
 ```
 
 Checks that must be green before a commit (the pre-commit hook runs the fast ones):
 
 ```sh
-cd backend && ./gradlew spotlessCheck compileJava compileTestJava test
+scripts/gradle spotlessCheck compileJava compileTestJava test
 pnpm web typecheck && pnpm web lint && pnpm web test -- --run
 pnpm tokens:build
 ```
