@@ -94,6 +94,8 @@ spotless {
 checkstyle {
     toolVersion = libs.findVersion("checkstyle").get().requiredVersion
     configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+    configProperties["org.checkstyle.google.suppressionfilter.config"] =
+        rootProject.file("config/checkstyle/checkstyle-suppressions.xml").path
     maxWarnings = 0
     isIgnoreFailures = false
 }

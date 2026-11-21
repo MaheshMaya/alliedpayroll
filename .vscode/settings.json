@@ -1,0 +1,7 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.import.gradle.wrapper.enabled": true,
+  "java.import.gradle.java.home": "C:\Users\mahes\.jdks\jdk-25.0.5+8",
+  "java.import.gradle.jvmArguments": "-Djava.net.preferIPv4Stack=true",
+  "java.configuration.updateBuildConfiguration": "interactive"
+}

@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (format, compile, tests, contract)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      - name: Format and architecture checks
+        run: ./gradlew --console=plain spotlessCheck checkstyleMain checkstyleTest
+      - name: Compile and test (Testcontainers PostgreSQL)
+        run: ./gradlew --console=plain compileJava compileTestJava test
+      - name: Committed OpenAPI document matches the code
+        working-directory: .
+        run: git diff --exit-code -- api/openapi/backend.json
+      - name: Test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports
+          path: backend/**/build/reports/tests/
+          if-no-files-found: ignore
+
+  web:
+    name: Web, tokens and SDK
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      LEFTHOOK: "0"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - name: Install (builds the SDK through prepare)
+        run: pnpm install --frozen-lockfile
+      - name: Generated SDK matches the committed OpenAPI document
+        run: pnpm --filter @alliedpayroll/api-client generate && git diff --exit-code -- api/sdk/typescript/src
+      - name: Design tokens build is committed and fresh
+        run: pnpm --filter @alliedpayroll/design-tokens check
+      - name: Typecheck, lint, format, unit tests
+        run: pnpm --filter @alliedpayroll/web check
+      - name: Production build
+        run: pnpm --filter @alliedpayroll/web build
+      - name: Storybook build
+        run: pnpm --filter @alliedpayroll/web build-storybook
+      - name: Conventional commits on the pull request
+        if: github.event_name == 'pull_request'
+        run: pnpm exec commitlint --from "${{ github.event.pull_request.base.sha }}" --to "${{ github.event.pull_request.head.sha }}" --verbose
+
+  images:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [backend, web]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - name: Backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: false
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+      - name: Web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: frontend/Dockerfile
+          push: false
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,scope=web,mode=max
