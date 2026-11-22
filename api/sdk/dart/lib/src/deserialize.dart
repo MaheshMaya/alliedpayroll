@@ -1,9 +1,15 @@
 import 'package:allied_api/src/model/bootstrap.dart';
 import 'package:allied_api/src/model/mobile_bootstrap.dart';
+import 'package:allied_api/src/model/page_response_user_summary.dart';
+import 'package:allied_api/src/model/permission_definition.dart';
+import 'package:allied_api/src/model/role_ref.dart';
+import 'package:allied_api/src/model/role_view.dart';
 import 'package:allied_api/src/model/session_view.dart';
 import 'package:allied_api/src/model/sync_policy.dart';
 import 'package:allied_api/src/model/tenant_summary.dart';
 import 'package:allied_api/src/model/user.dart';
+import 'package:allied_api/src/model/user_detail.dart';
+import 'package:allied_api/src/model/user_summary.dart';
 
 final _regList = RegExp(r'^List<(.*)>$');
 final _regSet = RegExp(r'^Set<(.*)>$');
@@ -32,6 +38,16 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'MobileBootstrap':
       return MobileBootstrap.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'PageResponseUserSummary':
+      return PageResponseUserSummary.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PermissionDefinition':
+      return PermissionDefinition.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'RoleRef':
+      return RoleRef.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'RoleView':
+      return RoleView.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'SessionView':
       return SessionView.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'SyncPolicy':
@@ -41,6 +57,10 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'User':
       return User.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'UserDetail':
+      return UserDetail.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'UserSummary':
+      return UserSummary.fromJson(value as Map<String, dynamic>) as ReturnType;
     default:
       RegExpMatch? match;
 

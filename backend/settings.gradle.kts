@@ -27,6 +27,7 @@ include(
     "platform:common-events",
     "platform:common-test",
     "modules:tenant",
+    "modules:identity",
     "channels:web-channel",
     "channels:mobile-channel",
 )

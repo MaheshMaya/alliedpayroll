@@ -9,5 +9,6 @@ dependencies {
     implementation(project(":platform:common-tenancy"))
     implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.spring.boot.starter.validation)
+    implementation(libs.spring.boot.starter.security)
     implementation(libs.springdoc.openapi)
 }

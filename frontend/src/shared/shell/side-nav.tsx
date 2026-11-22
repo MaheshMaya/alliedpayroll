@@ -26,9 +26,10 @@ interface SideNavProps {
  */
 export function SideNav({ collapsed, onToggle }: SideNavProps) {
   const intl = useIntl();
-  const { tenant, features } = useBootstrap();
+  const { tenant, features, permissions } = useBootstrap();
   const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const entries = visibleNav(primaryNav, features);
+  const entries = visibleNav(primaryNav, features, permissions);
+  const settings = visibleNav([settingsNav], features, permissions);
 
   return (
     <nav
@@ -102,8 +103,12 @@ export function SideNav({ collapsed, onToggle }: SideNavProps) {
       )}
 
       <div className="flex-1" />
-      <div className="h-px w-full bg-bg-navActive" />
-      <Leaf item={settingsNav} collapsed={collapsed} />
+      {settings.map((item) => (
+        <div key={item.id} className="flex flex-col gap-1">
+          <div className="h-px w-full bg-bg-navActive" />
+          <Leaf item={item} collapsed={collapsed} />
+        </div>
+      ))}
     </nav>
   );
 }

@@ -13,8 +13,18 @@ import type {
   GetBootstrapResponses,
   GetMobileBootstrapData,
   GetMobileBootstrapResponses,
+  GetRoleData,
+  GetRoleResponses,
   GetSessionData,
   GetSessionResponses,
+  GetUserData,
+  GetUserResponses,
+  ListPermissionsData,
+  ListPermissionsResponses,
+  ListRolesData,
+  ListRolesResponses,
+  ListUsersData,
+  ListUsersResponses,
   LoginData,
   LoginResponses,
 } from "./types.gen";
@@ -58,6 +68,62 @@ export const login = <ThrowOnError extends boolean = false>(
     url: "/auth/login",
     ...options,
   });
+
+/**
+ * Users of the tenant, with their roles
+ */
+export const listUsers = <ThrowOnError extends boolean = false>(
+  options?: Options<ListUsersData, ThrowOnError>,
+): RequestResult<ListUsersResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<ListUsersResponses, unknown, ThrowOnError>({
+    url: "/api/v1/users",
+    ...options,
+  });
+
+/**
+ * One user with roles and effective permissions
+ */
+export const getUser = <ThrowOnError extends boolean = false>(
+  options: Options<GetUserData, ThrowOnError>,
+): RequestResult<GetUserResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).get<GetUserResponses, unknown, ThrowOnError>({
+    url: "/api/v1/users/{id}",
+    ...options,
+  });
+
+/**
+ * Roles of the tenant with their permissions
+ */
+export const listRoles = <ThrowOnError extends boolean = false>(
+  options?: Options<ListRolesData, ThrowOnError>,
+): RequestResult<ListRolesResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<ListRolesResponses, unknown, ThrowOnError>({
+    url: "/api/v1/roles",
+    ...options,
+  });
+
+/**
+ * One role
+ */
+export const getRole = <ThrowOnError extends boolean = false>(
+  options: Options<GetRoleData, ThrowOnError>,
+): RequestResult<GetRoleResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).get<GetRoleResponses, unknown, ThrowOnError>({
+    url: "/api/v1/roles/{id}",
+    ...options,
+  });
+
+/**
+ * The permission catalogue, by module
+ */
+export const listPermissions = <ThrowOnError extends boolean = false>(
+  options?: Options<ListPermissionsData, ThrowOnError>,
+): RequestResult<ListPermissionsResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<
+    ListPermissionsResponses,
+    unknown,
+    ThrowOnError
+  >({ url: "/api/v1/permissions", ...options });
 
 /**
  * Bootstrap for the mobile app

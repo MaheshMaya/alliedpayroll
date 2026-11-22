@@ -22,6 +22,7 @@ spring:
     locations:
       - classpath:db/migration/platform
       - classpath:db/migration/tenant
+      - classpath:db/migration/identity
     validate-migration-naming: true
   jpa:
     open-in-view: false
@@ -61,8 +62,11 @@ spring:
             jwk-set-uri: ${OIDC_ISSUER:http://auth.localhost:8081/realms/alliedpayroll}/protocol/openid-connect/certs
             user-info-uri: ${OIDC_ISSUER:http://auth.localhost:8081/realms/alliedpayroll}/protocol/openid-connect/userinfo
             user-name-attribute: preferred_username
+  jackson:
+    # Absent, not null: the generated SDKs type optional fields as missing (headless-api §7).
+    default-property-inclusion: non_null
   messages:
-    basename: i18n/platform/messages,i18n/tenant/messages
+    basename: i18n/platform/messages,i18n/tenant/messages,i18n/identity/messages
     fallback-to-system-locale: false
     encoding: UTF-8
   mvc:

@@ -3,6 +3,8 @@ lib/allied_api.dart
 lib/src/api.dart
 lib/src/api/bootstrap_api.dart
 lib/src/api/mobile_api.dart
+lib/src/api/roles_api.dart
+lib/src/api/users_api.dart
 lib/src/api/web_session_api.dart
 lib/src/auth/api_key_auth.dart
 lib/src/auth/auth.dart
@@ -12,8 +14,14 @@ lib/src/auth/oauth.dart
 lib/src/deserialize.dart
 lib/src/model/bootstrap.dart
 lib/src/model/mobile_bootstrap.dart
+lib/src/model/page_response_user_summary.dart
+lib/src/model/permission_definition.dart
+lib/src/model/role_ref.dart
+lib/src/model/role_view.dart
 lib/src/model/session_view.dart
 lib/src/model/sync_policy.dart
 lib/src/model/tenant_summary.dart
 lib/src/model/user.dart
+lib/src/model/user_detail.dart
+lib/src/model/user_summary.dart
 pubspec.yaml

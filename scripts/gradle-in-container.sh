@@ -25,6 +25,8 @@ rc=0
 ./gradlew --console=plain "$@" < <(sleep infinity) || rc=$?
 
 cp "$dst/api/openapi/backend.json" "$src/api/openapi/backend.json" 2>/dev/null || true
+# Formatted sources (spotlessApply) come back the same way they went in.
+(cd "$dst/backend" && tar --exclude=./build --exclude='./*/build' --exclude='./*/*/build'   --exclude=./.gradle --exclude='./*/.gradle' --exclude='./*/*/.gradle' --exclude='./*/bin' --exclude='./*/*/bin'   -cf - .) | tar -xf - -C "$src/backend"
 if [ "$rc" -ne 0 ]; then
   echo "gradle exited $rc; reports are inside the container volume under /build/backend/**/build/reports" >&2
 fi

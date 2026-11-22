@@ -1,5 +1,6 @@
 package com.alliedpayroll.platform.security;
 
+import com.alliedpayroll.platform.core.ids.UserId;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 
@@ -8,15 +9,18 @@ import org.jspecify.annotations.Nullable;
  * session or a bearer token.
  *
  * @param subject the identity provider's stable subject
+ * @param username the login name the identity provider shows, used to link a provisioned user
  * @param organizations aliases of the organisations the identity provider says the user belongs to
- * @param permissions permission codes granted in the current tenant; empty until the identity
- *     module assigns roles
+ * @param userId the tenant's user row, once the identity module knows the person
+ * @param permissions permission codes granted in the current tenant through the person's roles
  */
 public record AuthenticatedUser(
     String subject,
+    @Nullable String username,
     @Nullable String displayName,
     @Nullable String email,
     Set<String> organizations,
+    @Nullable UserId userId,
     Set<String> permissions,
     Channel channel) {
 
@@ -31,5 +35,18 @@ public record AuthenticatedUser(
 
   public boolean has(String permission) {
     return permissions.contains(permission);
+  }
+
+  /** The same person with what the tenant knows about them. */
+  public AuthenticatedUser enrichedWith(TenantPrincipal principal) {
+    return new AuthenticatedUser(
+        subject,
+        username,
+        displayName,
+        email,
+        organizations,
+        principal.userId(),
+        principal.permissions(),
+        channel);
   }
 }

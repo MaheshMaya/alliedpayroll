@@ -1,6 +1,6 @@
 # Phase 1 plan: sign in and the app shell, as vertical slices
 
-Status: proposal, 2026-11-22. Scope is DEVELOPMENT_PLAN.md §4 Phase 1 (backend, web rows); the mobile row is being built separately and is marked "mobile slice later" here. Every slice follows the `vertical-slice` skill: backend API and web screen built together, proven through the real OIDC login (`/auth/login` → Keycloak → `/auth/callback`) as a seeded tenant user on the tenant subdomain. No auth bypass anywhere.
+Status: slice 1 delivered 2026-11-22 (read-only users and roles, real permissions; `/me` deferred to slice 7 since bootstrap already carries the person). Slices 2 to 9 remain proposals. Scope is DEVELOPMENT_PLAN.md §4 Phase 1 (backend, web rows); the mobile row is being built separately and is marked "mobile slice later" here. Every slice follows the `vertical-slice` skill: backend API and web screen built together, proven through the real OIDC login (`/auth/login` → Keycloak → `/auth/callback`) as a seeded tenant user on the tenant subdomain. No auth bypass anywhere.
 
 ## 0. Where we start
 

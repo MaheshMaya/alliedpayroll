@@ -11,6 +11,62 @@ export type SessionView = {
   tenantSlug?: string;
 };
 
+export type PageResponseUserSummary = {
+  items: Array<UserSummary>;
+  nextCursor?: string;
+  totalCount: number;
+};
+
+export type RoleRef = {
+  id: string;
+  code: string;
+  name: string;
+};
+
+export type UserSummary = {
+  id: string;
+  username: string;
+  displayName: string;
+  emailMasked?: string;
+  userType:
+    "ADMIN" | "MANAGER" | "CLIENT_CONTACT" | "EMPLOYEE" | "SERVICE_ACCOUNT";
+  status: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
+  scopeMode: "ALL" | "RESTRICTED";
+  roles: Array<RoleRef>;
+  lastLoginAt?: string;
+};
+
+export type UserDetail = {
+  id: string;
+  username: string;
+  displayName: string;
+  emailMasked?: string;
+  userType:
+    "ADMIN" | "MANAGER" | "CLIENT_CONTACT" | "EMPLOYEE" | "SERVICE_ACCOUNT";
+  status: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
+  scopeMode: "ALL" | "RESTRICTED";
+  linked: boolean;
+  roles: Array<RoleRef>;
+  permissions: Array<string>;
+  lastLoginAt?: string;
+};
+
+export type RoleView = {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  system: boolean;
+  permissions: Array<string>;
+};
+
+export type PermissionDefinition = {
+  code: string;
+  moduleCode: string;
+  descriptionKey: string;
+  moneyMoving: boolean;
+};
+
 export type Bootstrap = {
   tenant: TenantSummary;
   user: User;
@@ -78,6 +134,99 @@ export type LoginResponses = {
    */
   200: unknown;
 };
+
+export type ListUsersData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Matches display name or username
+     */
+    q?: string | null;
+    "filter[status]"?: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
+    page?: number;
+    size?: number;
+  };
+  url: "/api/v1/users";
+};
+
+export type ListUsersResponses = {
+  /**
+   * OK
+   */
+  200: PageResponseUserSummary;
+};
+
+export type ListUsersResponse = ListUsersResponses[keyof ListUsersResponses];
+
+export type GetUserData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/users/{id}";
+};
+
+export type GetUserResponses = {
+  /**
+   * OK
+   */
+  200: UserDetail;
+};
+
+export type GetUserResponse = GetUserResponses[keyof GetUserResponses];
+
+export type ListRolesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/api/v1/roles";
+};
+
+export type ListRolesResponses = {
+  /**
+   * OK
+   */
+  200: Array<RoleView>;
+};
+
+export type ListRolesResponse = ListRolesResponses[keyof ListRolesResponses];
+
+export type GetRoleData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/roles/{id}";
+};
+
+export type GetRoleResponses = {
+  /**
+   * OK
+   */
+  200: RoleView;
+};
+
+export type GetRoleResponse = GetRoleResponses[keyof GetRoleResponses];
+
+export type ListPermissionsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/api/v1/permissions";
+};
+
+export type ListPermissionsResponses = {
+  /**
+   * OK
+   */
+  200: Array<PermissionDefinition>;
+};
+
+export type ListPermissionsResponse =
+  ListPermissionsResponses[keyof ListPermissionsResponses];
 
 export type GetMobileBootstrapData = {
   body?: never;

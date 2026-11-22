@@ -11,6 +11,7 @@ import java.util.Objects;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +43,14 @@ public class ProblemHandler {
   @ExceptionHandler(DomainException.class)
   ProblemDetail domain(DomainException e, Locale locale) {
     return problem(HttpStatus.UNPROCESSABLE_CONTENT, e.code(), e.params(), locale);
+  }
+
+  /**
+   * A signed-in member without the permission; the web hides the control, the API still says so.
+   */
+  @ExceptionHandler(AccessDeniedException.class)
+  ProblemDetail denied(Locale locale) {
+    return problem(HttpStatus.FORBIDDEN, "authz.denied", Map.of(), locale);
   }
 
   @ExceptionHandler(MissingTenantException.class)

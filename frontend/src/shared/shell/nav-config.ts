@@ -12,15 +12,20 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+/** Built destinations; a nav item without one renders disabled. */
+export type NavPath = "/" | "/settings/users";
+
 export interface NavLeaf {
   kind: "item";
   id: string;
   labelId: string;
   icon: LucideIcon;
   /** Route path; absent while the screen is not built yet. */
-  to?: "/";
+  to?: NavPath;
   /** Module flag that must be on; absent means always shown. */
   module?: string;
+  /** Permission the API must have granted; absent means every member. */
+  permission?: string;
 }
 
 export interface NavGroup {
@@ -29,6 +34,7 @@ export interface NavGroup {
   labelId: string;
   icon: LucideIcon;
   module?: string;
+  permission?: string;
   children: readonly Omit<NavLeaf, "icon">[];
 }
 
@@ -133,13 +139,19 @@ export const settingsNav: NavLeaf = {
   id: "settings",
   labelId: "shell.nav.settings",
   icon: Settings,
+  to: "/settings/users",
+  permission: "identity:users_read",
 };
 
-export function visibleNav(
-  entries: readonly NavEntry[],
+export function visibleNav<T extends NavEntry>(
+  entries: readonly T[],
   features: Readonly<Record<string, boolean>>,
-): NavEntry[] {
+  permissions: readonly string[],
+): T[] {
   return entries.filter(
-    (entry) => entry.module === undefined || features[entry.module] === true,
+    (entry) =>
+      (entry.module === undefined || features[entry.module] === true) &&
+      (entry.permission === undefined ||
+        permissions.includes(entry.permission)),
   );
 }

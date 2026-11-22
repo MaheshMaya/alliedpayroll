@@ -21,3 +21,8 @@ export function useBootstrap(): Bootstrap {
   }
   return value;
 }
+
+/** Whether the API granted the permission; the API still decides, this only hides what it forbids. */
+export function useHasPermission(permission: string): boolean {
+  return useBootstrap().permissions.includes(permission);
+}

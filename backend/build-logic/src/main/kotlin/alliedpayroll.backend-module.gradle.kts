@@ -25,4 +25,5 @@ dependencies {
     testImplementation(libs.findLibrary("spring-boot-starter-security-test").get())
     testImplementation(libs.findLibrary("spring-boot-starter-data-jpa-test").get())
     testImplementation(libs.findLibrary("spring-modulith-starter-test").get())
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

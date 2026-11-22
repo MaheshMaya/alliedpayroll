@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":platform:common-web"))
     implementation(project(":platform:common-events"))
     implementation(project(":modules:tenant"))
+    implementation(project(":modules:identity"))
     implementation(project(":channels:web-channel"))
     implementation(project(":channels:mobile-channel"))
 

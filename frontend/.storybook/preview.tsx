@@ -63,7 +63,7 @@ const preview: Preview = {
       description: "Locale",
       toolbar: {
         icon: "globe",
-        items: ["en-IN", "qps-ploc"],
+        items: ["en-IN", "hi", "ta", "qps-ploc"],
         dynamicTitle: true,
       },
     },

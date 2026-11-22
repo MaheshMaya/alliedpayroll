@@ -68,6 +68,20 @@ describe("SideNav", () => {
     expect(payroll).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("shows Settings only when the API granted the permission", async () => {
+    renderNav(sentinelBootstrap({ permissions: ["identity:users_read"] }));
+    expect(await screen.findByRole("link", { name: "Settings" })).toBeVisible();
+  });
+
+  it("hides Settings from members without the permission", async () => {
+    renderNav(sentinelBootstrap());
+    await screen.findByRole("link", { name: "Home" });
+    expect(
+      screen.queryByRole("link", { name: "Settings" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
+  });
+
   it("keeps every destination reachable by name when collapsed", async () => {
     const { onToggle } = renderNav(sentinelBootstrap(), true);
     const user = userEvent.setup();
