@@ -83,8 +83,19 @@ class UserRepositoryAdapter implements UserRepository {
   @Override
   @Transactional
   public AppUser save(AppUser user) {
+    return write(user, SystemActor.ID.value());
+  }
+
+  @Override
+  @Transactional
+  public AppUser save(AppUser user, UserId actor) {
+    AppUser saved = write(user, actor.value());
+    users.flush();
+    return findById(saved.id()).orElseThrow();
+  }
+
+  private AppUser write(AppUser user, UUID actor) {
     Instant now = clock.instant();
-    UUID actor = SystemActor.ID.value();
     AppUserEntity entity =
         users
             .findById(user.id().value())
@@ -94,6 +105,22 @@ class UserRepositoryAdapter implements UserRepository {
             })
             .orElseGet(() -> users.save(new AppUserEntity(user, now, actor)));
     return entity.toDomain();
+  }
+
+  @Override
+  @Transactional
+  public void replaceRoles(UserId userId, Set<UUID> roleIds, UserId actor) {
+    AppUserEntity user = users.findById(userId.value()).orElseThrow();
+    for (UserRoleEntity assignment : userRoles.findByKeyUserIdIn(List.of(userId.value()))) {
+      if (!roleIds.contains(assignment.key().roleId())) {
+        userRoles.delete(assignment);
+      }
+    }
+    for (UUID roleId : roleIds) {
+      assignRole(userId, roleId, actor);
+    }
+    user.touch(clock.instant(), actor.value());
+    users.flush();
   }
 
   @Override

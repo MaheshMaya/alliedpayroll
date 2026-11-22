@@ -1,8 +1,10 @@
 package com.alliedpayroll.platform.web;
 
 import com.alliedpayroll.platform.core.error.ConflictException;
+import com.alliedpayroll.platform.core.error.DependencyUnavailableException;
 import com.alliedpayroll.platform.core.error.DomainException;
 import com.alliedpayroll.platform.core.error.NotFoundException;
+import com.alliedpayroll.platform.core.error.PreconditionFailedException;
 import com.alliedpayroll.platform.tenancy.MissingTenantException;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +40,16 @@ public class ProblemHandler {
   @ExceptionHandler(ConflictException.class)
   ProblemDetail conflict(ConflictException e, Locale locale) {
     return problem(HttpStatus.CONFLICT, e.code(), e.params(), locale);
+  }
+
+  @ExceptionHandler(PreconditionFailedException.class)
+  ProblemDetail stale(PreconditionFailedException e, Locale locale) {
+    return problem(HttpStatus.PRECONDITION_FAILED, e.code(), e.params(), locale);
+  }
+
+  @ExceptionHandler(DependencyUnavailableException.class)
+  ProblemDetail unavailable(DependencyUnavailableException e, Locale locale) {
+    return problem(HttpStatus.SERVICE_UNAVAILABLE, e.code(), e.params(), locale);
   }
 
   @ExceptionHandler(DomainException.class)

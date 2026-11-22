@@ -4,36 +4,14 @@ export type ClientOptions = {
   baseUrl: "http://localhost" | (string & {});
 };
 
-export type SessionView = {
-  subject: string;
-  displayName?: string;
-  email?: string;
-  tenantSlug?: string;
-};
-
-export type PageResponseUserSummary = {
-  items: Array<UserSummary>;
-  nextCursor?: string;
-  totalCount: number;
+export type ReplaceUserRolesRequest = {
+  roleIds: Array<string>;
 };
 
 export type RoleRef = {
   id: string;
   code: string;
   name: string;
-};
-
-export type UserSummary = {
-  id: string;
-  username: string;
-  displayName: string;
-  emailMasked?: string;
-  userType:
-    "ADMIN" | "MANAGER" | "CLIENT_CONTACT" | "EMPLOYEE" | "SERVICE_ACCOUNT";
-  status: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
-  scopeMode: "ALL" | "RESTRICTED";
-  roles: Array<RoleRef>;
-  lastLoginAt?: string;
 };
 
 export type UserDetail = {
@@ -49,6 +27,12 @@ export type UserDetail = {
   roles: Array<RoleRef>;
   permissions: Array<string>;
   lastLoginAt?: string;
+  version: number;
+};
+
+export type UpdateRoleRequest = {
+  name: string;
+  description?: string;
 };
 
 export type RoleView = {
@@ -58,6 +42,52 @@ export type RoleView = {
   description?: string;
   system: boolean;
   permissions: Array<string>;
+};
+
+export type ReplaceRolePermissionsRequest = {
+  permissions: Array<string>;
+};
+
+export type InviteUserRequest = {
+  displayName: string;
+  email: string;
+  userType:
+    "ADMIN" | "MANAGER" | "CLIENT_CONTACT" | "EMPLOYEE" | "SERVICE_ACCOUNT";
+  roleIds: Array<string>;
+};
+
+export type CreateRoleRequest = {
+  code: string;
+  name: string;
+  description?: string;
+  permissions: Array<string>;
+};
+
+export type SessionView = {
+  subject: string;
+  displayName?: string;
+  email?: string;
+  tenantSlug?: string;
+};
+
+export type PageResponseUserSummary = {
+  items: Array<UserSummary>;
+  nextCursor?: string;
+  totalCount: number;
+};
+
+export type UserSummary = {
+  id: string;
+  username: string;
+  displayName: string;
+  emailMasked?: string;
+  userType:
+    "ADMIN" | "MANAGER" | "CLIENT_CONTACT" | "EMPLOYEE" | "SERVICE_ACCOUNT";
+  status: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
+  scopeMode: "ALL" | "RESTRICTED";
+  roles: Array<RoleRef>;
+  lastLoginAt?: string;
+  version: number;
 };
 
 export type PermissionDefinition = {
@@ -97,6 +127,7 @@ export type TenantSummary = {
 };
 
 export type User = {
+  id?: string;
   subject: string;
   displayName?: string;
   email?: string;
@@ -149,6 +180,195 @@ export type PageResponseAuditEventView = {
   totalCount: number;
 };
 
+export type ReplaceUserRolesData = {
+  body: ReplaceUserRolesRequest;
+  headers?: {
+    /**
+     * The user's ETag, to refuse a change based on a stale read
+     */
+    "If-Match"?: string | null;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/users/{id}/roles";
+};
+
+export type ReplaceUserRolesResponses = {
+  /**
+   * OK
+   */
+  200: UserDetail;
+};
+
+export type ReplaceUserRolesResponse =
+  ReplaceUserRolesResponses[keyof ReplaceUserRolesResponses];
+
+export type GetRoleData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/roles/{id}";
+};
+
+export type GetRoleResponses = {
+  /**
+   * OK
+   */
+  200: RoleView;
+};
+
+export type GetRoleResponse = GetRoleResponses[keyof GetRoleResponses];
+
+export type UpdateRoleData = {
+  body: UpdateRoleRequest;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/roles/{id}";
+};
+
+export type UpdateRoleResponses = {
+  /**
+   * OK
+   */
+  200: RoleView;
+};
+
+export type UpdateRoleResponse = UpdateRoleResponses[keyof UpdateRoleResponses];
+
+export type ReplaceRolePermissionsData = {
+  body: ReplaceRolePermissionsRequest;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/roles/{id}/permissions";
+};
+
+export type ReplaceRolePermissionsResponses = {
+  /**
+   * OK
+   */
+  200: RoleView;
+};
+
+export type ReplaceRolePermissionsResponse =
+  ReplaceRolePermissionsResponses[keyof ReplaceRolePermissionsResponses];
+
+export type ListUsersData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Matches display name or username
+     */
+    q?: string | null;
+    "filter[status]"?: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
+    page?: number;
+    size?: number;
+  };
+  url: "/api/v1/users";
+};
+
+export type ListUsersResponses = {
+  /**
+   * OK
+   */
+  200: PageResponseUserSummary;
+};
+
+export type ListUsersResponse = ListUsersResponses[keyof ListUsersResponses];
+
+export type InviteUserData = {
+  body: InviteUserRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/users";
+};
+
+export type InviteUserResponses = {
+  /**
+   * OK
+   */
+  200: UserDetail;
+};
+
+export type InviteUserResponse = InviteUserResponses[keyof InviteUserResponses];
+
+export type EnableUserData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/users/{id}/enable";
+};
+
+export type EnableUserResponses = {
+  /**
+   * OK
+   */
+  200: UserDetail;
+};
+
+export type EnableUserResponse = EnableUserResponses[keyof EnableUserResponses];
+
+export type DisableUserData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: "/api/v1/users/{id}/disable";
+};
+
+export type DisableUserResponses = {
+  /**
+   * OK
+   */
+  200: UserDetail;
+};
+
+export type DisableUserResponse =
+  DisableUserResponses[keyof DisableUserResponses];
+
+export type ListRolesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/api/v1/roles";
+};
+
+export type ListRolesResponses = {
+  /**
+   * OK
+   */
+  200: Array<RoleView>;
+};
+
+export type ListRolesResponse = ListRolesResponses[keyof ListRolesResponses];
+
+export type CreateRoleData = {
+  body: CreateRoleRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/roles";
+};
+
+export type CreateRoleResponses = {
+  /**
+   * OK
+   */
+  200: RoleView;
+};
+
+export type CreateRoleResponse = CreateRoleResponses[keyof CreateRoleResponses];
+
 export type GetSessionData = {
   body?: never;
   path?: never;
@@ -182,30 +402,6 @@ export type LoginResponses = {
   200: unknown;
 };
 
-export type ListUsersData = {
-  body?: never;
-  path?: never;
-  query?: {
-    /**
-     * Matches display name or username
-     */
-    q?: string | null;
-    "filter[status]"?: "INVITED" | "ACTIVE" | "DISABLED" | "LOCKED";
-    page?: number;
-    size?: number;
-  };
-  url: "/api/v1/users";
-};
-
-export type ListUsersResponses = {
-  /**
-   * OK
-   */
-  200: PageResponseUserSummary;
-};
-
-export type ListUsersResponse = ListUsersResponses[keyof ListUsersResponses];
-
 export type GetUserData = {
   body?: never;
   path: {
@@ -223,40 +419,6 @@ export type GetUserResponses = {
 };
 
 export type GetUserResponse = GetUserResponses[keyof GetUserResponses];
-
-export type ListRolesData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/api/v1/roles";
-};
-
-export type ListRolesResponses = {
-  /**
-   * OK
-   */
-  200: Array<RoleView>;
-};
-
-export type ListRolesResponse = ListRolesResponses[keyof ListRolesResponses];
-
-export type GetRoleData = {
-  body?: never;
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: "/api/v1/roles/{id}";
-};
-
-export type GetRoleResponses = {
-  /**
-   * OK
-   */
-  200: RoleView;
-};
-
-export type GetRoleResponse = GetRoleResponses[keyof GetRoleResponses];
 
 export type ListPermissionsData = {
   body?: never;

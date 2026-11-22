@@ -16,6 +16,11 @@ const sections = [
     permission: "identity:users_read",
   },
   {
+    to: "/settings/roles",
+    labelId: "settings.nav.roles",
+    permission: "identity:users_read",
+  },
+  {
     to: "/settings/audit",
     labelId: "settings.nav.audit",
     permission: "audit:read",

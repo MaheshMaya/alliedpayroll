@@ -9,6 +9,12 @@ import type {
 } from "./client";
 import { client } from "./client.gen";
 import type {
+  CreateRoleData,
+  CreateRoleResponses,
+  DisableUserData,
+  DisableUserResponses,
+  EnableUserData,
+  EnableUserResponses,
   GetBootstrapData,
   GetBootstrapResponses,
   GetMobileBootstrapData,
@@ -19,6 +25,8 @@ import type {
   GetSessionResponses,
   GetUserData,
   GetUserResponses,
+  InviteUserData,
+  InviteUserResponses,
   ListAuditEventsData,
   ListAuditEventsResponses,
   ListPermissionsData,
@@ -29,6 +37,12 @@ import type {
   ListUsersResponses,
   LoginData,
   LoginResponses,
+  ReplaceRolePermissionsData,
+  ReplaceRolePermissionsResponses,
+  ReplaceUserRolesData,
+  ReplaceUserRolesResponses,
+  UpdateRoleData,
+  UpdateRoleResponses,
 } from "./types.gen";
 
 export type Options<
@@ -48,6 +62,144 @@ export type Options<
    */
   meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
+
+/**
+ * Make these the user's roles; applies from their next request
+ */
+export const replaceUserRoles = <ThrowOnError extends boolean = false>(
+  options: Options<ReplaceUserRolesData, ThrowOnError>,
+): RequestResult<ReplaceUserRolesResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).put<
+    ReplaceUserRolesResponses,
+    unknown,
+    ThrowOnError
+  >({
+    url: "/api/v1/users/{id}/roles",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+/**
+ * One role
+ */
+export const getRole = <ThrowOnError extends boolean = false>(
+  options: Options<GetRoleData, ThrowOnError>,
+): RequestResult<GetRoleResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).get<GetRoleResponses, unknown, ThrowOnError>({
+    url: "/api/v1/roles/{id}",
+    ...options,
+  });
+
+/**
+ * Rename a tenant-defined role
+ */
+export const updateRole = <ThrowOnError extends boolean = false>(
+  options: Options<UpdateRoleData, ThrowOnError>,
+): RequestResult<UpdateRoleResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).put<UpdateRoleResponses, unknown, ThrowOnError>({
+    url: "/api/v1/roles/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+/**
+ * Make these the permissions of a tenant-defined role
+ */
+export const replaceRolePermissions = <ThrowOnError extends boolean = false>(
+  options: Options<ReplaceRolePermissionsData, ThrowOnError>,
+): RequestResult<ReplaceRolePermissionsResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).put<
+    ReplaceRolePermissionsResponses,
+    unknown,
+    ThrowOnError
+  >({
+    url: "/api/v1/roles/{id}/permissions",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+/**
+ * Users of the tenant, with their roles
+ */
+export const listUsers = <ThrowOnError extends boolean = false>(
+  options?: Options<ListUsersData, ThrowOnError>,
+): RequestResult<ListUsersResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<ListUsersResponses, unknown, ThrowOnError>({
+    url: "/api/v1/users",
+    ...options,
+  });
+
+/**
+ * Invite a person; they activate on first sign-in
+ */
+export const inviteUser = <ThrowOnError extends boolean = false>(
+  options: Options<InviteUserData, ThrowOnError>,
+): RequestResult<InviteUserResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).post<InviteUserResponses, unknown, ThrowOnError>({
+    url: "/api/v1/users",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+/**
+ * Let a disabled user sign in again
+ */
+export const enableUser = <ThrowOnError extends boolean = false>(
+  options: Options<EnableUserData, ThrowOnError>,
+): RequestResult<EnableUserResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).post<EnableUserResponses, unknown, ThrowOnError>({
+    url: "/api/v1/users/{id}/enable",
+    ...options,
+  });
+
+/**
+ * Sign the user out everywhere and refuse their access
+ */
+export const disableUser = <ThrowOnError extends boolean = false>(
+  options: Options<DisableUserData, ThrowOnError>,
+): RequestResult<DisableUserResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).post<DisableUserResponses, unknown, ThrowOnError>({
+    url: "/api/v1/users/{id}/disable",
+    ...options,
+  });
+
+/**
+ * Roles of the tenant with their permissions
+ */
+export const listRoles = <ThrowOnError extends boolean = false>(
+  options?: Options<ListRolesData, ThrowOnError>,
+): RequestResult<ListRolesResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<ListRolesResponses, unknown, ThrowOnError>({
+    url: "/api/v1/roles",
+    ...options,
+  });
+
+/**
+ * A role the tenant defines for itself
+ */
+export const createRole = <ThrowOnError extends boolean = false>(
+  options: Options<CreateRoleData, ThrowOnError>,
+): RequestResult<CreateRoleResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).post<CreateRoleResponses, unknown, ThrowOnError>({
+    url: "/api/v1/roles",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
 
 /**
  * Who is signed in on this browser session
@@ -72,17 +224,6 @@ export const login = <ThrowOnError extends boolean = false>(
   });
 
 /**
- * Users of the tenant, with their roles
- */
-export const listUsers = <ThrowOnError extends boolean = false>(
-  options?: Options<ListUsersData, ThrowOnError>,
-): RequestResult<ListUsersResponses, unknown, ThrowOnError> =>
-  (options?.client ?? client).get<ListUsersResponses, unknown, ThrowOnError>({
-    url: "/api/v1/users",
-    ...options,
-  });
-
-/**
  * One user with roles and effective permissions
  */
 export const getUser = <ThrowOnError extends boolean = false>(
@@ -90,28 +231,6 @@ export const getUser = <ThrowOnError extends boolean = false>(
 ): RequestResult<GetUserResponses, unknown, ThrowOnError> =>
   (options.client ?? client).get<GetUserResponses, unknown, ThrowOnError>({
     url: "/api/v1/users/{id}",
-    ...options,
-  });
-
-/**
- * Roles of the tenant with their permissions
- */
-export const listRoles = <ThrowOnError extends boolean = false>(
-  options?: Options<ListRolesData, ThrowOnError>,
-): RequestResult<ListRolesResponses, unknown, ThrowOnError> =>
-  (options?.client ?? client).get<ListRolesResponses, unknown, ThrowOnError>({
-    url: "/api/v1/roles",
-    ...options,
-  });
-
-/**
- * One role
- */
-export const getRole = <ThrowOnError extends boolean = false>(
-  options: Options<GetRoleData, ThrowOnError>,
-): RequestResult<GetRoleResponses, unknown, ThrowOnError> =>
-  (options.client ?? client).get<GetRoleResponses, unknown, ThrowOnError>({
-    url: "/api/v1/roles/{id}",
     ...options,
   });
 

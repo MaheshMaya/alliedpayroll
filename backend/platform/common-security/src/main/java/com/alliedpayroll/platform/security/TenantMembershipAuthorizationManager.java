@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 /**
  * A tenant API call is allowed only when the request resolved to a tenant and the authenticated
  * user belongs to that tenant's organisation. A user of one tenant on another tenant's host gets
- * 403 even with a valid token.
+ * 403 even with a valid token, and so does a member the tenant has disabled, whose browser session
+ * or token may outlive the change.
  */
 @Component
 public class TenantMembershipAuthorizationManager
@@ -30,6 +31,7 @@ public class TenantMembershipAuthorizationManager
     boolean granted =
         users
             .from(authentication.get())
+            .filter(user -> !user.disabled())
             .flatMap(user -> TenantContext.current().map(tenant -> user.belongsTo(tenant.slug())))
             .orElse(false);
     return new AuthorizationDecision(granted);

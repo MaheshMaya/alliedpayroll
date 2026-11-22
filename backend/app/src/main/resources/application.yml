@@ -117,6 +117,12 @@ alliedpayroll:
     kiosk-client-id: ${OIDC_KIOSK_CLIENT_ID:alliedpayroll-kiosk}
   oidc:
     end-session-uri: ${OIDC_ISSUER:http://auth.localhost:8081/realms/alliedpayroll}/protocol/openid-connect/logout
+  identity:
+    keycloak:
+      base-url: ${KEYCLOAK_URL:http://auth.localhost:8081}
+      realm: ${KEYCLOAK_REALM:alliedpayroll}
+      client-id: ${KEYCLOAK_BACKEND_CLIENT_ID:alliedpayroll-backend}
+      client-secret: ${KEYCLOAK_BACKEND_SECRET:}
 
 logging:
   pattern:

@@ -79,6 +79,13 @@ class RoleEntity {
     this.updatedBy = actor;
   }
 
+  void apply(Role role, Instant now, UUID actor) {
+    this.name = role.name();
+    this.description = role.description();
+    this.updatedAt = now;
+    this.updatedBy = actor;
+  }
+
   Role toDomain(Set<String> permissions) {
     return new Role(id, code, name, description, system, permissions);
   }

@@ -13,6 +13,7 @@ import org.jspecify.annotations.Nullable;
  * @param organizations aliases of the organisations the identity provider says the user belongs to
  * @param userId the tenant's user row, once the identity module knows the person
  * @param permissions permission codes granted in the current tenant through the person's roles
+ * @param disabled the tenant has disabled this person; every tenant API call is refused
  */
 public record AuthenticatedUser(
     String subject,
@@ -22,7 +23,8 @@ public record AuthenticatedUser(
     Set<String> organizations,
     @Nullable UserId userId,
     Set<String> permissions,
-    Channel channel) {
+    Channel channel,
+    boolean disabled) {
 
   public AuthenticatedUser {
     organizations = Set.copyOf(organizations);
@@ -47,6 +49,7 @@ public record AuthenticatedUser(
         organizations,
         principal.userId(),
         principal.permissions(),
-        channel);
+        channel,
+        principal.disabled());
   }
 }

@@ -116,7 +116,8 @@ public class CurrentUserProvider {
         claims.organizations(),
         null,
         java.util.Set.of(),
-        claims.channel());
+        claims.channel(),
+        false);
   }
 
   private Channel channelOf(@Nullable String authorizedParty) {

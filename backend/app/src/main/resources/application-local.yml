@@ -1,6 +1,11 @@
 alliedpayroll:
   seed:
     demo-tenants: true
+  identity:
+    keycloak:
+      client-secret: ${KEYCLOAK_BACKEND_SECRET:dev-backend-secret}
+      # No mail server locally: invited people get the demo password (backend/dev/seed/README.md).
+      initial-password: ${DEMO_USER_PASSWORD:Welcome@123}
 
 logging:
   level:

@@ -5,23 +5,37 @@ import {
   type InfiniteData,
   infiniteQueryOptions,
   queryOptions,
+  type UseMutationOptions,
 } from "@tanstack/react-query";
 
 import { client } from "../client.gen";
 import {
+  createRole,
+  disableUser,
+  enableUser,
   getBootstrap,
   getMobileBootstrap,
   getRole,
   getSession,
   getUser,
+  inviteUser,
   listAuditEvents,
   listPermissions,
   listRoles,
   listUsers,
   login,
   type Options,
+  replaceRolePermissions,
+  replaceUserRoles,
+  updateRole,
 } from "../sdk.gen";
 import type {
+  CreateRoleData,
+  CreateRoleResponse,
+  DisableUserData,
+  DisableUserResponse,
+  EnableUserData,
+  EnableUserResponse,
   GetBootstrapData,
   GetBootstrapResponse,
   GetMobileBootstrapData,
@@ -32,6 +46,8 @@ import type {
   GetSessionResponse,
   GetUserData,
   GetUserResponse,
+  InviteUserData,
+  InviteUserResponse,
   ListAuditEventsData,
   ListAuditEventsResponse,
   ListPermissionsData,
@@ -41,7 +57,40 @@ import type {
   ListUsersData,
   ListUsersResponse,
   LoginData,
+  ReplaceRolePermissionsData,
+  ReplaceRolePermissionsResponse,
+  ReplaceUserRolesData,
+  ReplaceUserRolesResponse,
+  UpdateRoleData,
+  UpdateRoleResponse,
 } from "../types.gen";
+
+/**
+ * Make these the user's roles; applies from their next request
+ */
+export const replaceUserRolesMutation = (
+  options?: Partial<Options<ReplaceUserRolesData>>,
+): UseMutationOptions<
+  ReplaceUserRolesResponse,
+  DefaultError,
+  Options<ReplaceUserRolesData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    ReplaceUserRolesResponse,
+    DefaultError,
+    Options<ReplaceUserRolesData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await replaceUserRoles({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
 
 export type QueryKey<TOptions extends Options> = [
   Pick<TOptions, "baseUrl" | "body" | "headers" | "path" | "query"> & {
@@ -83,21 +132,21 @@ const createQueryKey = <TOptions extends Options>(
   return [params];
 };
 
-export const getSessionQueryKey = (options?: Options<GetSessionData>) =>
-  createQueryKey("getSession", options);
+export const getRoleQueryKey = (options: Options<GetRoleData>) =>
+  createQueryKey("getRole", options);
 
 /**
- * Who is signed in on this browser session
+ * One role
  */
-export const getSessionOptions = (options?: Options<GetSessionData>) =>
+export const getRoleOptions = (options: Options<GetRoleData>) =>
   queryOptions<
-    GetSessionResponse,
+    GetRoleResponse,
     DefaultError,
-    GetSessionResponse,
-    ReturnType<typeof getSessionQueryKey>
+    GetRoleResponse,
+    ReturnType<typeof getRoleQueryKey>
   >({
     queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getSession({
+      const { data } = await getRole({
         ...options,
         ...queryKey[0],
         signal,
@@ -105,33 +154,62 @@ export const getSessionOptions = (options?: Options<GetSessionData>) =>
       });
       return data;
     },
-    queryKey: getSessionQueryKey(options),
+    queryKey: getRoleQueryKey(options),
   });
 
-export const loginQueryKey = (options?: Options<LoginData>) =>
-  createQueryKey("login", options);
-
 /**
- * Start the sign-in flow for this tenant
+ * Rename a tenant-defined role
  */
-export const loginOptions = (options?: Options<LoginData>) =>
-  queryOptions<
-    unknown,
+export const updateRoleMutation = (
+  options?: Partial<Options<UpdateRoleData>>,
+): UseMutationOptions<
+  UpdateRoleResponse,
+  DefaultError,
+  Options<UpdateRoleData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    UpdateRoleResponse,
     DefaultError,
-    unknown,
-    ReturnType<typeof loginQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await login({
+    Options<UpdateRoleData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await updateRole({
         ...options,
-        ...queryKey[0],
-        signal,
+        ...fnOptions,
         throwOnError: true,
       });
       return data;
     },
-    queryKey: loginQueryKey(options),
-  });
+  };
+  return mutationOptions;
+};
+
+/**
+ * Make these the permissions of a tenant-defined role
+ */
+export const replaceRolePermissionsMutation = (
+  options?: Partial<Options<ReplaceRolePermissionsData>>,
+): UseMutationOptions<
+  ReplaceRolePermissionsResponse,
+  DefaultError,
+  Options<ReplaceRolePermissionsData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    ReplaceRolePermissionsResponse,
+    DefaultError,
+    Options<ReplaceRolePermissionsData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await replaceRolePermissions({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
 
 export const listUsersQueryKey = (options?: Options<ListUsersData>) =>
   createQueryKey("listUsers", options);
@@ -242,30 +320,86 @@ export const listUsersInfiniteOptions = (options?: Options<ListUsersData>) => {
   return opts as Omit<typeof opts, "initialData">;
 };
 
-export const getUserQueryKey = (options: Options<GetUserData>) =>
-  createQueryKey("getUser", options);
-
 /**
- * One user with roles and effective permissions
+ * Invite a person; they activate on first sign-in
  */
-export const getUserOptions = (options: Options<GetUserData>) =>
-  queryOptions<
-    GetUserResponse,
+export const inviteUserMutation = (
+  options?: Partial<Options<InviteUserData>>,
+): UseMutationOptions<
+  InviteUserResponse,
+  DefaultError,
+  Options<InviteUserData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    InviteUserResponse,
     DefaultError,
-    GetUserResponse,
-    ReturnType<typeof getUserQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getUser({
+    Options<InviteUserData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await inviteUser({
         ...options,
-        ...queryKey[0],
-        signal,
+        ...fnOptions,
         throwOnError: true,
       });
       return data;
     },
-    queryKey: getUserQueryKey(options),
-  });
+  };
+  return mutationOptions;
+};
+
+/**
+ * Let a disabled user sign in again
+ */
+export const enableUserMutation = (
+  options?: Partial<Options<EnableUserData>>,
+): UseMutationOptions<
+  EnableUserResponse,
+  DefaultError,
+  Options<EnableUserData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    EnableUserResponse,
+    DefaultError,
+    Options<EnableUserData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await enableUser({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+/**
+ * Sign the user out everywhere and refuse their access
+ */
+export const disableUserMutation = (
+  options?: Partial<Options<DisableUserData>>,
+): UseMutationOptions<
+  DisableUserResponse,
+  DefaultError,
+  Options<DisableUserData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DisableUserResponse,
+    DefaultError,
+    Options<DisableUserData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await disableUser({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
 
 export const listRolesQueryKey = (options?: Options<ListRolesData>) =>
   createQueryKey("listRoles", options);
@@ -292,21 +426,48 @@ export const listRolesOptions = (options?: Options<ListRolesData>) =>
     queryKey: listRolesQueryKey(options),
   });
 
-export const getRoleQueryKey = (options: Options<GetRoleData>) =>
-  createQueryKey("getRole", options);
+/**
+ * A role the tenant defines for itself
+ */
+export const createRoleMutation = (
+  options?: Partial<Options<CreateRoleData>>,
+): UseMutationOptions<
+  CreateRoleResponse,
+  DefaultError,
+  Options<CreateRoleData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    CreateRoleResponse,
+    DefaultError,
+    Options<CreateRoleData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await createRole({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const getSessionQueryKey = (options?: Options<GetSessionData>) =>
+  createQueryKey("getSession", options);
 
 /**
- * One role
+ * Who is signed in on this browser session
  */
-export const getRoleOptions = (options: Options<GetRoleData>) =>
+export const getSessionOptions = (options?: Options<GetSessionData>) =>
   queryOptions<
-    GetRoleResponse,
+    GetSessionResponse,
     DefaultError,
-    GetRoleResponse,
-    ReturnType<typeof getRoleQueryKey>
+    GetSessionResponse,
+    ReturnType<typeof getSessionQueryKey>
   >({
     queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getRole({
+      const { data } = await getSession({
         ...options,
         ...queryKey[0],
         signal,
@@ -314,7 +475,57 @@ export const getRoleOptions = (options: Options<GetRoleData>) =>
       });
       return data;
     },
-    queryKey: getRoleQueryKey(options),
+    queryKey: getSessionQueryKey(options),
+  });
+
+export const loginQueryKey = (options?: Options<LoginData>) =>
+  createQueryKey("login", options);
+
+/**
+ * Start the sign-in flow for this tenant
+ */
+export const loginOptions = (options?: Options<LoginData>) =>
+  queryOptions<
+    unknown,
+    DefaultError,
+    unknown,
+    ReturnType<typeof loginQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await login({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: loginQueryKey(options),
+  });
+
+export const getUserQueryKey = (options: Options<GetUserData>) =>
+  createQueryKey("getUser", options);
+
+/**
+ * One user with roles and effective permissions
+ */
+export const getUserOptions = (options: Options<GetUserData>) =>
+  queryOptions<
+    GetUserResponse,
+    DefaultError,
+    GetUserResponse,
+    ReturnType<typeof getUserQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getUser({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getUserQueryKey(options),
   });
 
 export const listPermissionsQueryKey = (

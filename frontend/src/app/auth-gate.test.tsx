@@ -70,6 +70,30 @@ describe("AuthGate", () => {
     expect(await screen.findByText("Signed-in content")).toBeVisible();
   });
 
+  it("tells a disabled person their access was switched off", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation((input) => {
+      const url =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input.url;
+      if (url.endsWith("/auth/session")) {
+        return Promise.resolve(jsonResponse(200, { subject: "user-1" }));
+      }
+      return Promise.resolve(
+        jsonResponse(403, { status: 403, code: "identity.user_disabled" }),
+      );
+    });
+
+    renderGate();
+
+    expect(
+      await screen.findByText(/your access to this organisation is disabled/i),
+    ).toBeVisible();
+    expect(screen.queryByText(/not a member/i)).not.toBeInTheDocument();
+  });
+
   it("offers a retry when the session check fails for another reason", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(503));
 

@@ -21,7 +21,14 @@ public interface UserRepository {
 
   UserPage search(UserSearch search, int page, int size);
 
+  /** Saves as the system actor; seeds and sign-in linking. */
   AppUser save(AppUser user);
+
+  /** Saves a change a person made, flushed so the returned version is the new one. */
+  AppUser save(AppUser user, UserId actor);
+
+  /** Makes the given roles the user's only roles and moves the user's version. */
+  void replaceRoles(UserId userId, Set<UUID> roleIds, UserId actor);
 
   Map<UserId, Set<UUID>> roleIdsOf(Collection<UserId> userIds);
 

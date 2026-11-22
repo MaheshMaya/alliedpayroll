@@ -3,6 +3,7 @@ package com.alliedpayroll.identity.infrastructure.persistence;
 import com.alliedpayroll.identity.domain.Role;
 import com.alliedpayroll.identity.domain.RoleRepository;
 import com.alliedpayroll.platform.core.ids.SystemActor;
+import com.alliedpayroll.platform.core.ids.UserId;
 import com.alliedpayroll.platform.tenancy.TenantContext;
 import jakarta.persistence.EntityManager;
 import java.time.Clock;
@@ -55,23 +56,47 @@ class RoleRepositoryAdapter implements RoleRepository {
   @Override
   @Transactional
   public Role save(Role role) {
+    return create(role, SystemActor.ID);
+  }
+
+  @Override
+  @Transactional
+  public Role create(Role role, UserId actor) {
     Instant now = clock.instant();
-    UUID actor = SystemActor.ID.value();
-    RoleEntity saved = roles.save(new RoleEntity(role, now, actor));
+    RoleEntity saved = roles.save(new RoleEntity(role, now, actor.value()));
     for (String permission : role.permissions()) {
-      grants.save(new RolePermissionEntity(saved.id(), permission, now, actor));
+      grants.save(new RolePermissionEntity(saved.id(), permission, now, actor.value()));
     }
     return saved.toDomain(role.permissions());
   }
 
   @Override
   @Transactional
+  public Role update(Role role, UserId actor) {
+    RoleEntity entity = roles.findByIdAndDeletedAtIsNull(role.id()).orElseThrow();
+    entity.apply(role, clock.instant(), actor.value());
+    for (RolePermissionEntity grant : grants.findByKeyRoleIdIn(List.of(role.id()))) {
+      if (!role.permissions().contains(grant.key().permissionCode())) {
+        grants.delete(grant);
+      }
+    }
+    grant(role.id(), role.permissions(), actor);
+    roles.flush();
+    return findById(role.id()).orElseThrow();
+  }
+
+  @Override
+  @Transactional
   public void grant(UUID roleId, Set<String> permissions) {
+    grant(roleId, permissions, SystemActor.ID);
+  }
+
+  private void grant(UUID roleId, Set<String> permissions, UserId actor) {
     Instant now = clock.instant();
     for (String permission : permissions) {
       RolePermissionEntity.Key key = new RolePermissionEntity.Key(roleId, permission);
       if (!grants.existsById(key)) {
-        grants.save(new RolePermissionEntity(roleId, permission, now, SystemActor.ID.value()));
+        grants.save(new RolePermissionEntity(roleId, permission, now, actor.value()));
       }
     }
   }

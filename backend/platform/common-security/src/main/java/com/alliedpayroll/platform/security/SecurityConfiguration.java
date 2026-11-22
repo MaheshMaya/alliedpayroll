@@ -47,7 +47,8 @@ public class SecurityConfiguration {
   SecurityFilterChain apiSecurity(
       HttpSecurity http,
       ObjectProvider<ApiSecurityCustomizer> customizers,
-      TenantMembershipAuthorizationManager tenantMembership)
+      TenantMembershipAuthorizationManager tenantMembership,
+      ApiAccessDeniedHandler accessDenied)
       throws Exception {
     for (ApiSecurityCustomizer customizer : customizers.orderedStream().toList()) {
       customizer.customize(http);
@@ -68,9 +69,12 @@ public class SecurityConfiguration {
                 .csrfTokenRequestHandler(csrfHandler)
                 .ignoringRequestMatchers(SecurityConfiguration::carriesBearerToken))
         .exceptionHandling(handling ->
-            handling.defaultAuthenticationEntryPointFor(
-                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                PathPatternRequestMatcher.withDefaults().matcher("/api/**")));
+            handling
+                .defaultAuthenticationEntryPointFor(
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                    PathPatternRequestMatcher.withDefaults().matcher("/api/**"))
+                .defaultAccessDeniedHandlerFor(
+                    accessDenied, PathPatternRequestMatcher.withDefaults().matcher("/api/**")));
     return http.build();
   }
 

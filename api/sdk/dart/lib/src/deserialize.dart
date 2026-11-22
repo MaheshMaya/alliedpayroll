@@ -1,14 +1,19 @@
 import 'package:allied_api/src/model/audit_event_view.dart';
 import 'package:allied_api/src/model/bootstrap.dart';
+import 'package:allied_api/src/model/create_role_request.dart';
+import 'package:allied_api/src/model/invite_user_request.dart';
 import 'package:allied_api/src/model/mobile_bootstrap.dart';
 import 'package:allied_api/src/model/page_response_audit_event_view.dart';
 import 'package:allied_api/src/model/page_response_user_summary.dart';
 import 'package:allied_api/src/model/permission_definition.dart';
+import 'package:allied_api/src/model/replace_role_permissions_request.dart';
+import 'package:allied_api/src/model/replace_user_roles_request.dart';
 import 'package:allied_api/src/model/role_ref.dart';
 import 'package:allied_api/src/model/role_view.dart';
 import 'package:allied_api/src/model/session_view.dart';
 import 'package:allied_api/src/model/sync_policy.dart';
 import 'package:allied_api/src/model/tenant_summary.dart';
+import 'package:allied_api/src/model/update_role_request.dart';
 import 'package:allied_api/src/model/user.dart';
 import 'package:allied_api/src/model/user_detail.dart';
 import 'package:allied_api/src/model/user_summary.dart';
@@ -40,6 +45,12 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'Bootstrap':
       return Bootstrap.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'CreateRoleRequest':
+      return CreateRoleRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'InviteUserRequest':
+      return InviteUserRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'MobileBootstrap':
       return MobileBootstrap.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -52,6 +63,14 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'PermissionDefinition':
       return PermissionDefinition.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'ReplaceRolePermissionsRequest':
+      return ReplaceRolePermissionsRequest.fromJson(
+            value as Map<String, dynamic>,
+          )
+          as ReturnType;
+    case 'ReplaceUserRolesRequest':
+      return ReplaceUserRolesRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'RoleRef':
       return RoleRef.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'RoleView':
@@ -62,6 +81,9 @@ ReturnType deserialize<ReturnType, BaseType>(
       return SyncPolicy.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'TenantSummary':
       return TenantSummary.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'UpdateRoleRequest':
+      return UpdateRoleRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'User':
       return User.fromJson(value as Map<String, dynamic>) as ReturnType;

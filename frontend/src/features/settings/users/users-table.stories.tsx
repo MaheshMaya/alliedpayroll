@@ -19,6 +19,7 @@ const users: UserSummary[] = [
     userType: "ADMIN",
     status: "ACTIVE",
     scopeMode: "ALL",
+    version: 0,
     roles: [{ id: "r1", code: "TENANT_ADMIN", name: "Administrator" }],
     lastLoginAt: "2026-11-22T04:00:00Z",
   },
@@ -30,6 +31,7 @@ const users: UserSummary[] = [
     userType: "MANAGER",
     status: "INVITED",
     scopeMode: "RESTRICTED",
+    version: 0,
     roles: [
       { id: "r2", code: "HR", name: "HR" },
       { id: "r3", code: "SUPERVISOR", name: "Supervisor" },
@@ -42,6 +44,7 @@ const users: UserSummary[] = [
     userType: "EMPLOYEE",
     status: "DISABLED",
     scopeMode: "RESTRICTED",
+    version: 0,
     roles: [],
   },
   {
@@ -52,6 +55,7 @@ const users: UserSummary[] = [
     userType: "CLIENT_CONTACT",
     status: "LOCKED",
     scopeMode: "RESTRICTED",
+    version: 0,
     roles: [{ id: "r4", code: "CLIENT_CONTACT", name: "Client contact" }],
   },
 ];

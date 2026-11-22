@@ -51,6 +51,32 @@ ensure_client alliedpayroll-kiosk \
   -s 'redirectUris=["com.alliedpayroll.kiosk://callback"]' \
   -s 'attributes={"pkce.code.challenge.method":"S256"}'
 
+# The backend's own client: no browser flow, a service account that invites, disables and signs
+# people out through the Admin API. The secret is a development value; real environments inject
+# their own through KEYCLOAK_BACKEND_SECRET.
+BACKEND_SECRET="${KEYCLOAK_BACKEND_SECRET:-dev-backend-secret}"
+if [ -z "$(client_id alliedpayroll-backend)" ]; then
+  $KC create clients -r "$REALM" -s clientId=alliedpayroll-backend -s protocol=openid-connect \
+    -s publicClient=false -s serviceAccountsEnabled=true -s standardFlowEnabled=false \
+    -s directAccessGrantsEnabled=false -s implicitFlowEnabled=false
+  echo "client alliedpayroll-backend created"
+fi
+backend_id="$(client_id alliedpayroll-backend)"
+$KC update "clients/$backend_id" -r "$REALM" -s "secret=$BACKEND_SECRET"
+# The Admin API refuses tokens without the audience this scope adds.
+admin_scope=""
+while IFS= read -r line; do
+  if [ "${line##*,}" = "kc-admin-api" ]; then admin_scope="${line%%,*}"; fi
+done < <($KC get client-scopes -r "$REALM" --fields id,name --format csv --noquotes)
+$KC update "clients/$backend_id/default-client-scopes/$admin_scope" -r "$REALM"
+$KC add-roles -r "$REALM" --uusername service-account-alliedpayroll-backend \
+  --cclientid realm-management --rolename manage-users --rolename view-users \
+  --rolename query-users --rolename view-organizations --rolename manage-organizations \
+  --rolename query-organizations
+
+# A person with one name has no family name; Keycloak requires one by default.
+$KC update users/profile -r "$REALM" -f /seed/user-profile.json
+
 org_id() {
   # The image has no awk; match the alias column by hand.
   local line id alias

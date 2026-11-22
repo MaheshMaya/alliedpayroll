@@ -28,7 +28,8 @@ final class UserViews {
       UserStatus status,
       ScopeMode scopeMode,
       List<RoleRef> roles,
-      @Nullable Instant lastLoginAt) {}
+      @Nullable Instant lastLoginAt,
+      long version) {}
 
   record UserDetail(
       UUID id,
@@ -41,7 +42,8 @@ final class UserViews {
       boolean linked,
       List<RoleRef> roles,
       Set<String> permissions,
-      @Nullable Instant lastLoginAt) {}
+      @Nullable Instant lastLoginAt,
+      long version) {}
 
   static UserSummary summary(UserView view) {
     AppUser user = view.user();
@@ -54,7 +56,8 @@ final class UserViews {
         user.status(),
         user.scopeMode(),
         refs(view.roles()),
-        user.lastLoginAt());
+        user.lastLoginAt(),
+        user.version());
   }
 
   static UserDetail detail(UserView view) {
@@ -70,7 +73,8 @@ final class UserViews {
         user.isLinked(),
         refs(view.roles()),
         view.permissions(),
-        user.lastLoginAt());
+        user.lastLoginAt(),
+        user.version());
   }
 
   static List<RoleRef> refs(List<Role> roles) {

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsAuditRouteImport } from './routes/settings/audit'
+import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
 import { Route as SettingsUsersRouteImport } from './routes/settings/users'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const SettingsAuditRoute = SettingsAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => SettingsRoute,
 } as any)
+const SettingsRolesRoute = SettingsRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => SettingsRoute,
+} as any)
 const SettingsUsersRoute = SettingsUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -45,12 +51,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRouteWithChildren
   '/settings/audit': typeof SettingsAuditRoute
+  '/settings/roles': typeof SettingsRolesRoute
   '/settings/users': typeof SettingsUsersRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/settings/audit': typeof SettingsAuditRoute
+  '/settings/roles': typeof SettingsRolesRoute
   '/settings/users': typeof SettingsUsersRoute
   '/settings': typeof SettingsIndexRoute
 }
@@ -59,20 +67,32 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRouteWithChildren
   '/settings/audit': typeof SettingsAuditRoute
+  '/settings/roles': typeof SettingsRolesRoute
   '/settings/users': typeof SettingsUsersRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/settings' | '/settings/audit' | '/settings/users' | '/settings/'
+    | '/'
+    | '/settings'
+    | '/settings/audit'
+    | '/settings/roles'
+    | '/settings/users'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings/audit' | '/settings/users' | '/settings'
+  to:
+    | '/'
+    | '/settings/audit'
+    | '/settings/roles'
+    | '/settings/users'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/settings'
     | '/settings/audit'
+    | '/settings/roles'
     | '/settings/users'
     | '/settings/'
   fileRoutesById: FileRoutesById
@@ -112,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsAuditRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/settings/roles': {
+      id: '/settings/roles'
+      path: '/roles'
+      fullPath: '/settings/roles'
+      preLoaderRoute: typeof SettingsRolesRouteImport
+      parentRoute: typeof SettingsRoute
+    }
     '/settings/users': {
       id: '/settings/users'
       path: '/users'
@@ -124,12 +151,14 @@ declare module '@tanstack/react-router' {
 
 interface SettingsRouteChildren {
   SettingsAuditRoute: typeof SettingsAuditRoute
+  SettingsRolesRoute: typeof SettingsRolesRoute
   SettingsUsersRoute: typeof SettingsUsersRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
   SettingsAuditRoute: SettingsAuditRoute,
+  SettingsRolesRoute: SettingsRolesRoute,
   SettingsUsersRoute: SettingsUsersRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }

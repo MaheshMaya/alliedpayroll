@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
+import { useHasPermission } from "@/shared/data/bootstrap-context";
 import { Avatar } from "@/shared/ui/avatar";
+import { Button } from "@/shared/ui/button";
 import { Sheet } from "@/shared/ui/sheet";
 import { Skeleton } from "@/shared/ui/skeleton";
 
+import { UserAccessActions } from "./user-access-actions";
+import { UserRolesEditor } from "./user-roles-editor";
 import { UserStatusBadge } from "./user-status-badge";
 import { userDetailOptions } from "./users-query";
 
@@ -14,10 +18,15 @@ interface UserDetailSheetProps {
   onClose: () => void;
 }
 
-/** Quick look at one user: identity, sign-in state, roles and what those roles allow. */
+/**
+ * One user: identity, sign-in state, roles and what those roles allow. An administrator with the
+ * manage permission edits the roles in place and disables or enables access.
+ */
 export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
   const intl = useIntl();
   const user = useQuery(userDetailOptions(userId));
+  const canManage = useHasPermission("identity:users_manage");
+  const [editingRoles, setEditingRoles] = useState(false);
 
   return (
     <Sheet
@@ -56,7 +65,7 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
               fallback={user.data.username}
               className="size-10"
             />
-            <div className="flex min-w-0 flex-col gap-1">
+            <div className="flex min-w-0 flex-col items-start gap-1">
               <span className="font-mono text-small text-text-secondary">
                 {user.data.username}
               </span>
@@ -88,13 +97,33 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
           </dl>
 
           <section aria-labelledby="user-roles" className="flex flex-col gap-2">
-            <h3
-              id="user-roles"
-              className="text-overline tracking-[0.04em] text-text-muted uppercase"
-            >
-              <FormattedMessage id="settings.users.detail.roles" />
-            </h3>
-            {user.data.roles.length === 0 ? (
+            <div className="flex items-center justify-between gap-3">
+              <h3
+                id="user-roles"
+                className="text-overline tracking-[0.04em] text-text-muted uppercase"
+              >
+                <FormattedMessage id="settings.users.detail.roles" />
+              </h3>
+              {canManage && !editingRoles && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setEditingRoles(true);
+                  }}
+                >
+                  <FormattedMessage id="settings.users.roles.edit" />
+                </Button>
+              )}
+            </div>
+            {editingRoles ? (
+              <UserRolesEditor
+                user={user.data}
+                onDone={() => {
+                  setEditingRoles(false);
+                }}
+              />
+            ) : user.data.roles.length === 0 ? (
               <p className="text-small text-text-muted">
                 <FormattedMessage id="settings.users.noRoles" />
               </p>
@@ -144,6 +173,21 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
               </ul>
             )}
           </section>
+
+          {canManage && (
+            <section
+              aria-labelledby="user-access"
+              className="flex flex-col gap-2 border-t border-border-default pt-5"
+            >
+              <h3
+                id="user-access"
+                className="text-overline tracking-[0.04em] text-text-muted uppercase"
+              >
+                <FormattedMessage id="settings.users.access.title" />
+              </h3>
+              <UserAccessActions user={user.data} />
+            </section>
+          )}
         </div>
       )}
     </Sheet>

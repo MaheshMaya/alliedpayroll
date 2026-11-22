@@ -3,12 +3,16 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useId, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
-import { useBootstrap } from "@/shared/data/bootstrap-context";
+import {
+  useBootstrap,
+  useHasPermission,
+} from "@/shared/data/bootstrap-context";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { NativeSelect } from "@/shared/ui/native-select";
 import { Skeleton } from "@/shared/ui/skeleton";
 
+import { InviteUserDialog } from "./invite-user-dialog";
 import { UserDetailSheet } from "./user-detail-sheet";
 import {
   PAGE_SIZE,
@@ -21,8 +25,8 @@ import { UsersTable } from "./users-table";
 const SEARCH_DEBOUNCE_MS = 300;
 
 /**
- * Settings, Users: who can sign in and what their roles allow. Read-only in this slice; inviting
- * and editing arrive with the next one. Filters, page and the open record are URL state.
+ * Settings, Users: who can sign in and what their roles allow. Administrators invite people here
+ * and open a person to change roles or access. Filters, page and the open record are URL state.
  */
 export function UsersPage() {
   const intl = useIntl();
@@ -36,6 +40,8 @@ export function UsersPage() {
   const searchId = useId();
   const statusId = useId();
   const [term, setTerm] = useState(search.q ?? "");
+  const canManage = useHasPermission("identity:users_manage");
+  const [inviting, setInviting] = useState(false);
 
   useEffect(() => {
     const normalised = term.trim() === "" ? undefined : term.trim();
@@ -66,6 +72,9 @@ export function UsersPage() {
       }),
     });
   };
+  const openUser = (id: string) => {
+    void navigate({ search: (previous) => ({ ...previous, user: id }) });
+  };
   const closeDetail = () => {
     void navigate({
       search: (previous) => ({ ...previous, user: undefined }),
@@ -78,16 +87,28 @@ export function UsersPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h2 className="text-h2 text-text-default">
-          <FormattedMessage id="settings.users.title" />
-        </h2>
-        <p className="text-small text-text-secondary">
-          <FormattedMessage
-            id="settings.users.subtitle"
-            values={{ tenant: tenant.name }}
-          />
-        </p>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-h2 text-text-default">
+            <FormattedMessage id="settings.users.title" />
+          </h2>
+          <p className="text-small text-text-secondary">
+            <FormattedMessage
+              id="settings.users.subtitle"
+              values={{ tenant: tenant.name }}
+            />
+          </p>
+        </div>
+        {canManage && (
+          <Button
+            className="self-start"
+            onClick={() => {
+              setInviting(true);
+            }}
+          >
+            <FormattedMessage id="settings.users.invite.open" />
+          </Button>
+        )}
       </header>
 
       <div className="flex flex-col gap-3 md:flex-row md:items-end">
@@ -220,7 +241,21 @@ export function UsersPage() {
       )}
 
       {search.user !== undefined && (
-        <UserDetailSheet userId={search.user} onClose={closeDetail} />
+        <UserDetailSheet
+          key={search.user}
+          userId={search.user}
+          onClose={closeDetail}
+        />
+      )}
+      {canManage && (
+        <InviteUserDialog
+          open={inviting}
+          onOpenChange={setInviting}
+          onInvited={(id) => {
+            setInviting(false);
+            openUser(id);
+          }}
+        />
       )}
     </div>
   );

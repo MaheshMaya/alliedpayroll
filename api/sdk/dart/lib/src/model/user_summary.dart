@@ -36,6 +36,8 @@ class UserSummary {
     required this.roles,
 
     this.lastLoginAt,
+
+    required this.version,
   });
 
   @JsonKey(name: r'id', required: true, includeIfNull: false)
@@ -80,6 +82,9 @@ class UserSummary {
   @JsonKey(name: r'lastLoginAt', required: false, includeIfNull: false)
   final DateTime? lastLoginAt;
 
+  @JsonKey(name: r'version', required: true, includeIfNull: false)
+  final int version;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -92,7 +97,8 @@ class UserSummary {
           other.status == status &&
           other.scopeMode == scopeMode &&
           other.roles == roles &&
-          other.lastLoginAt == lastLoginAt;
+          other.lastLoginAt == lastLoginAt &&
+          other.version == version;
 
   @override
   int get hashCode =>
@@ -104,7 +110,8 @@ class UserSummary {
       status.hashCode +
       scopeMode.hashCode +
       roles.hashCode +
-      lastLoginAt.hashCode;
+      lastLoginAt.hashCode +
+      version.hashCode;
 
   factory UserSummary.fromJson(Map<String, dynamic> json) =>
       _$UserSummaryFromJson(json);

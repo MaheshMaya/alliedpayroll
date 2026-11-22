@@ -120,6 +120,12 @@ class AppUserEntity {
     this.updatedBy = actor;
   }
 
+  /** Marks the row changed, so its version moves and stale If-Match headers are refused. */
+  void touch(Instant now, UUID actor) {
+    this.updatedAt = now;
+    this.updatedBy = actor;
+  }
+
   void recordLogin(Instant at, String channel) {
     this.lastLoginAt = at;
     this.lastLoginChannel = channel;
@@ -140,7 +146,8 @@ class AppUserEntity {
         status,
         scopeMode,
         keycloakSubject,
-        lastLoginAt);
+        lastLoginAt,
+        version);
   }
 
   UUID id() {

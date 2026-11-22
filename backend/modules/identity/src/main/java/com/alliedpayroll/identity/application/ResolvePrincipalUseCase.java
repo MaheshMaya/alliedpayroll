@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * What the tenant knows about the person a token describes. A provisioned user whose Keycloak
  * subject is not linked yet is linked on their first request, by username; a member the tenant
- * never provisioned gets no permissions.
+ * never provisioned gets no permissions, and a disabled user is marked so the API refuses them.
  */
 @Service
 public class ResolvePrincipalUseCase {
@@ -35,8 +35,10 @@ public class ResolvePrincipalUseCase {
 
   public TenantPrincipal resolve(CurrentTenant tenant, IdentityClaims claims) {
     Optional<AppUser> user = users.findBySubject(claims.subject()).or(() -> link(tenant, claims));
-    return user.filter(AppUser::canSignIn)
-        .map(found -> new TenantPrincipal(found.id(), permissionsOf(found)))
+    return user.map(found ->
+            found.canSignIn()
+                ? TenantPrincipal.active(found.id(), permissionsOf(found))
+                : TenantPrincipal.disabled(found.id()))
         .orElse(TenantPrincipal.none());
   }
 
@@ -47,8 +49,12 @@ public class ResolvePrincipalUseCase {
     }
     return users
         .findByUsername(username)
-        .filter(user -> !user.isLinked() && user.canSignIn())
-        .map(user -> linking.link(tenant, user, claims.subject(), claims.channel().name()));
+        .filter(user -> !user.isLinked())
+        // A disabled person is never linked; they come back unlinked and are refused.
+        .map(user ->
+            user.canSignIn()
+                ? linking.link(tenant, user, claims.subject(), claims.channel().name())
+                : user);
   }
 
   private Set<String> permissionsOf(AppUser user) {

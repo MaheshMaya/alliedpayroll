@@ -5,9 +5,7 @@ import com.alliedpayroll.identity.domain.AppUser;
 import com.alliedpayroll.identity.domain.EmailMask;
 import com.alliedpayroll.identity.domain.Role;
 import com.alliedpayroll.identity.domain.RoleRepository;
-import com.alliedpayroll.identity.domain.ScopeMode;
 import com.alliedpayroll.identity.domain.UserRepository;
-import com.alliedpayroll.identity.domain.UserStatus;
 import com.alliedpayroll.platform.core.error.NotFoundException;
 import com.alliedpayroll.platform.core.ids.IdGenerator;
 import com.alliedpayroll.platform.core.ids.SystemActor;
@@ -43,18 +41,12 @@ class EnsureUserUseCase implements UserAdministration {
             .findByUsername(command.username())
             .orElseGet(() ->
                 users.save(
-                    new AppUser(
+                    AppUser.invited(
                         new UserId(ids.next()),
                         command.username(),
                         command.displayName(),
                         EmailMask.mask(command.email()),
-                        command.userType(),
-                        UserStatus.INVITED,
-                        command.userType() == com.alliedpayroll.identity.api.UserType.ADMIN
-                            ? ScopeMode.ALL
-                            : ScopeMode.RESTRICTED,
-                        null,
-                        null)));
+                        command.userType())));
     for (String code : command.roleCodes()) {
       Role role = roles.findByCode(code).orElseThrow(() -> NotFoundException.of("role", code));
       users.assignRole(user.id(), role.id(), SystemActor.ID);

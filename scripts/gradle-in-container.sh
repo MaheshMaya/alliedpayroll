@@ -14,7 +14,10 @@ if [ "${1:-}" = "--clean" ]; then
   mkdir -p "$dst/backend"
 fi
 
-# Sources only: build output, Gradle state and IDE folders stay on each side.
+# Sources only: build output, Gradle state and IDE folders stay on each side. Source trees are
+# replaced, not merged, so a file deleted or renamed on the host does not survive in the volume and
+# come back with the sync below.
+find "$dst/backend" -path '*/build' -prune -o -path '*/src/*' -type f -print0 | xargs -0 -r rm -f
 (cd "$src/backend" && tar --exclude=./build --exclude='./*/build' --exclude='./*/*/build' \
   --exclude=./.gradle --exclude='./*/.gradle' --exclude='./*/*/.gradle' --exclude='./*/bin' --exclude='./*/*/bin' \
   -cf - .) | tar -xf - -C "$dst/backend"

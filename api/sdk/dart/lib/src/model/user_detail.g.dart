@@ -29,6 +29,8 @@ abstract class _$UserDetailCWProxy {
 
   UserDetail lastLoginAt(DateTime? lastLoginAt);
 
+  UserDetail version(int version);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `UserDetail(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -47,6 +49,7 @@ abstract class _$UserDetailCWProxy {
     List<RoleRef> roles,
     Set<String> permissions,
     DateTime? lastLoginAt,
+    int version,
   });
 }
 
@@ -94,6 +97,9 @@ class _$UserDetailCWProxyImpl implements _$UserDetailCWProxy {
       this(lastLoginAt: lastLoginAt);
 
   @override
+  UserDetail version(int version) => this(version: version);
+
+  @override
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `UserDetail(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -112,6 +118,7 @@ class _$UserDetailCWProxyImpl implements _$UserDetailCWProxy {
     Object? roles = const $CopyWithPlaceholder(),
     Object? permissions = const $CopyWithPlaceholder(),
     Object? lastLoginAt = const $CopyWithPlaceholder(),
+    Object? version = const $CopyWithPlaceholder(),
   }) {
     return UserDetail(
       id: id == const $CopyWithPlaceholder()
@@ -158,6 +165,10 @@ class _$UserDetailCWProxyImpl implements _$UserDetailCWProxy {
           ? _value.lastLoginAt
           // ignore: cast_nullable_to_non_nullable
           : lastLoginAt as DateTime?,
+      version: version == const $CopyWithPlaceholder()
+          ? _value.version
+          // ignore: cast_nullable_to_non_nullable
+          : version as int,
     );
   }
 }
@@ -186,6 +197,7 @@ UserDetail _$UserDetailFromJson(Map<String, dynamic> json) =>
           'linked',
           'roles',
           'permissions',
+          'version',
         ],
       );
       final val = UserDetail(
@@ -232,6 +244,7 @@ UserDetail _$UserDetailFromJson(Map<String, dynamic> json) =>
           'lastLoginAt',
           (v) => v == null ? null : DateTime.parse(v as String),
         ),
+        version: $checkedConvert('version', (v) => (v as num).toInt()),
       );
       return val;
     });
@@ -249,6 +262,7 @@ Map<String, dynamic> _$UserDetailToJson(UserDetail instance) =>
       'roles': instance.roles.map((e) => e.toJson()).toList(),
       'permissions': instance.permissions.toList(),
       'lastLoginAt': ?instance.lastLoginAt?.toIso8601String(),
+      'version': instance.version,
     };
 
 const _$UserDetailUserTypeEnumEnumMap = {

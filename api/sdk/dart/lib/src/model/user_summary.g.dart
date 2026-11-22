@@ -25,6 +25,8 @@ abstract class _$UserSummaryCWProxy {
 
   UserSummary lastLoginAt(DateTime? lastLoginAt);
 
+  UserSummary version(int version);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `UserSummary(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -41,6 +43,7 @@ abstract class _$UserSummaryCWProxy {
     UserSummaryScopeModeEnum scopeMode,
     List<RoleRef> roles,
     DateTime? lastLoginAt,
+    int version,
   });
 }
 
@@ -82,6 +85,9 @@ class _$UserSummaryCWProxyImpl implements _$UserSummaryCWProxy {
       this(lastLoginAt: lastLoginAt);
 
   @override
+  UserSummary version(int version) => this(version: version);
+
+  @override
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `UserSummary(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -98,6 +104,7 @@ class _$UserSummaryCWProxyImpl implements _$UserSummaryCWProxy {
     Object? scopeMode = const $CopyWithPlaceholder(),
     Object? roles = const $CopyWithPlaceholder(),
     Object? lastLoginAt = const $CopyWithPlaceholder(),
+    Object? version = const $CopyWithPlaceholder(),
   }) {
     return UserSummary(
       id: id == const $CopyWithPlaceholder()
@@ -136,6 +143,10 @@ class _$UserSummaryCWProxyImpl implements _$UserSummaryCWProxy {
           ? _value.lastLoginAt
           // ignore: cast_nullable_to_non_nullable
           : lastLoginAt as DateTime?,
+      version: version == const $CopyWithPlaceholder()
+          ? _value.version
+          // ignore: cast_nullable_to_non_nullable
+          : version as int,
     );
   }
 }
@@ -162,6 +173,7 @@ UserSummary _$UserSummaryFromJson(Map<String, dynamic> json) =>
           'status',
           'scopeMode',
           'roles',
+          'version',
         ],
       );
       final val = UserSummary(
@@ -203,6 +215,7 @@ UserSummary _$UserSummaryFromJson(Map<String, dynamic> json) =>
           'lastLoginAt',
           (v) => v == null ? null : DateTime.parse(v as String),
         ),
+        version: $checkedConvert('version', (v) => (v as num).toInt()),
       );
       return val;
     });
@@ -218,6 +231,7 @@ Map<String, dynamic> _$UserSummaryToJson(UserSummary instance) =>
       'scopeMode': _$UserSummaryScopeModeEnumEnumMap[instance.scopeMode]!,
       'roles': instance.roles.map((e) => e.toJson()).toList(),
       'lastLoginAt': ?instance.lastLoginAt?.toIso8601String(),
+      'version': instance.version,
     };
 
 const _$UserSummaryUserTypeEnumEnumMap = {

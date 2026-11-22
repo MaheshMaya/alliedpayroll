@@ -36,6 +36,7 @@ const asha: UserSummary = {
   userType: "ADMIN",
   status: "ACTIVE",
   scopeMode: "ALL",
+  version: 0,
   roles: [{ id: "r1", code: "TENANT_ADMIN", name: "Administrator" }],
   lastLoginAt: "2026-11-22T04:00:00Z",
 };
@@ -51,6 +52,7 @@ const page: PageResponseUserSummary = {
       userType: "EMPLOYEE",
       status: "INVITED",
       scopeMode: "RESTRICTED",
+      version: 0,
       roles: [],
     },
   ],

@@ -17,7 +17,10 @@ part 'user.g.dart';
 )
 class User {
   /// Returns a new [User] instance.
-  User({required this.subject, this.displayName, this.email});
+  User({this.id, required this.subject, this.displayName, this.email});
+
+  @JsonKey(name: r'id', required: false, includeIfNull: false)
+  final String? id;
 
   @JsonKey(name: r'subject', required: true, includeIfNull: false)
   final String subject;
@@ -32,12 +35,14 @@ class User {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is User &&
+          other.id == id &&
           other.subject == subject &&
           other.displayName == displayName &&
           other.email == email;
 
   @override
-  int get hashCode => subject.hashCode + displayName.hashCode + email.hashCode;
+  int get hashCode =>
+      id.hashCode + subject.hashCode + displayName.hashCode + email.hashCode;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

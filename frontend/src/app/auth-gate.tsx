@@ -49,6 +49,14 @@ function BootstrapGate({ children }: { children: ReactNode }) {
   if (bootstrap.isPending) {
     return <FullPageStatus messageId="auth.loading" />;
   }
+  if (bootstrap.isError && bootstrap.error.code === "identity.user_disabled") {
+    // The tenant disabled this person while their session was still open.
+    return (
+      <FullPageStatus messageId="auth.disabled">
+        <SignOutForm />
+      </FullPageStatus>
+    );
+  }
   if (bootstrap.isError && bootstrap.error.status === 403) {
     // Signed in at Keycloak, but not a member of this host's organisation.
     return (

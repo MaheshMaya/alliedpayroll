@@ -1,6 +1,7 @@
 package com.alliedpayroll.tenant.application;
 
 import com.alliedpayroll.platform.core.error.NotFoundException;
+import com.alliedpayroll.platform.core.ids.UserId;
 import com.alliedpayroll.platform.security.AuthenticatedUser;
 import com.alliedpayroll.platform.security.CurrentUserProvider;
 import com.alliedpayroll.platform.tenancy.TenantContext;
@@ -37,9 +38,14 @@ class BootstrapUseCase implements BootstrapService {
             .orElseThrow(() -> NotFoundException.of("tenant", current.slug()));
     AuthenticatedUser user = users.require();
     Map<String, Boolean> features = featureFlags.enabledFor(tenant.id());
+    UserId userId = user.userId();
     return new Bootstrap(
         summaryOf(tenant),
-        new Bootstrap.User(user.subject(), user.displayName(), user.email()),
+        new Bootstrap.User(
+            userId == null ? null : userId.value(),
+            user.subject(),
+            user.displayName(),
+            user.email()),
         user.permissions(),
         features);
   }
