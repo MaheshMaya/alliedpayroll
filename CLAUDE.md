@@ -15,7 +15,7 @@ Machine notes: local checks run in Docker (Rancher Desktop with the moby engine)
 # synced into a volume because Gradle's client dies on the Windows bind mount; Testcontainers through
 # the Docker socket). ALLIED_GRADLE=host runs ./gradlew on the host instead. First run: --clean.
 scripts/gradle spotlessApply                                   # google-java-format + ktlint
-scripts/gradle spotlessCheck compileJava compileTestJava       # rung 1 (the Stop hook runs this)
+scripts/gradle spotlessCheck checkstyleMain checkstyleTest compileJava compileTestJava   # rung 1 (the Stop hook runs this)
 scripts/gradle test                                            # Testcontainers PostgreSQL
 scripts/gradle :app:test --tests '*BootstrapIsolationTest*'    # one class
 docker compose up backend-api                                  # API on :8088 from the image, seeds demo tenants

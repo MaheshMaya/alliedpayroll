@@ -28,7 +28,7 @@ run() {
 
 if [ -f "backend/gradlew" ]; then
   # scripts/gradle runs Gradle in the toolchain container by default; ALLIED_GRADLE=host uses the wrapper.
-  run "backend format check and compile"     "scripts/gradle -q spotlessCheck compileJava compileTestJava"
+  run "backend format check and compile"     "scripts/gradle -q spotlessCheck checkstyleMain checkstyleTest compileJava compileTestJava"
 fi
 if [ -f "api/sdk/typescript/package.json" ]; then
   run "api client build" "pnpm --filter @alliedpayroll/api-client --silent build"

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class SystemRolesTest {
 
   @Test
-  void everyIdentityPermissionOfARoleExistsInTheCatalogue() {
+  void roleIdentityPermissionsExistInTheCatalogue() {
     Set<String> catalogue =
         IdentityPermissions.ALL.stream()
             .map(PermissionDefinition::code)

@@ -102,7 +102,7 @@ class AuditApiTest {
   }
 
   @Test
-  void aDenialIsRecordedWithTheActorAndTheAdministratorReadsIt() throws Exception {
+  void denialIsRecordedWithTheActorAndTheAdministratorReadsIt() throws Exception {
     mvc.perform(
             get("/api/v1/users")
                 .header("Host", "sentinel.localhost")
@@ -122,7 +122,7 @@ class AuditApiTest {
   }
 
   @Test
-  void theFirstSignInOfAUserLeavesAStateChangeOnTheUser() throws Exception {
+  void firstSignInLeavesStateChangeOnTheUser() throws Exception {
     mvc.perform(
             get("/api/v1/bootstrap")
                 .header("Host", "sentinel.localhost")
@@ -183,7 +183,7 @@ class AuditApiTest {
   }
 
   @Test
-  void aBrowserSignInIsRecordedAsLoginByTheSignedInPerson() throws Exception {
+  void browserSignInIsRecordedAsLoginByTheSignedInPerson() throws Exception {
     // What Spring Security publishes when the OIDC callback succeeds, for a seeded person.
     OidcIdToken idToken =
         new OidcIdToken(
@@ -212,7 +212,7 @@ class AuditApiTest {
   }
 
   @Test
-  void anAnonymousRequestIsNotADenial() throws Exception {
+  void anonymousRequestIsNotDenial() throws Exception {
     mvc.perform(
             get("/api/v1/roles/00000000-0000-0000-0000-00000000dead")
                 .header("Host", "sentinel.localhost"))
