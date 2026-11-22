@@ -1,6 +1,7 @@
 build.yaml
 lib/allied_api.dart
 lib/src/api.dart
+lib/src/api/audit_api.dart
 lib/src/api/bootstrap_api.dart
 lib/src/api/mobile_api.dart
 lib/src/api/roles_api.dart
@@ -12,8 +13,10 @@ lib/src/auth/basic_auth.dart
 lib/src/auth/bearer_auth.dart
 lib/src/auth/oauth.dart
 lib/src/deserialize.dart
+lib/src/model/audit_event_view.dart
 lib/src/model/bootstrap.dart
 lib/src/model/mobile_bootstrap.dart
+lib/src/model/page_response_audit_event_view.dart
 lib/src/model/page_response_user_summary.dart
 lib/src/model/permission_definition.dart
 lib/src/model/role_ref.dart

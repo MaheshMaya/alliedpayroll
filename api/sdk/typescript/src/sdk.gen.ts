@@ -19,6 +19,8 @@ import type {
   GetSessionResponses,
   GetUserData,
   GetUserResponses,
+  ListAuditEventsData,
+  ListAuditEventsResponses,
   ListPermissionsData,
   ListPermissionsResponses,
   ListRolesData,
@@ -146,3 +148,15 @@ export const getBootstrap = <ThrowOnError extends boolean = false>(
   (options?.client ?? client).get<GetBootstrapResponses, unknown, ThrowOnError>(
     { url: "/api/v1/bootstrap", ...options },
   );
+
+/**
+ * Trail of the tenant, newest first; security rows need audit:security_read
+ */
+export const listAuditEvents = <ThrowOnError extends boolean = false>(
+  options?: Options<ListAuditEventsData, ThrowOnError>,
+): RequestResult<ListAuditEventsResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<
+    ListAuditEventsResponses,
+    unknown,
+    ThrowOnError
+  >({ url: "/api/v1/audit-events", ...options });

@@ -1,5 +1,7 @@
+import 'package:allied_api/src/model/audit_event_view.dart';
 import 'package:allied_api/src/model/bootstrap.dart';
 import 'package:allied_api/src/model/mobile_bootstrap.dart';
+import 'package:allied_api/src/model/page_response_audit_event_view.dart';
 import 'package:allied_api/src/model/page_response_user_summary.dart';
 import 'package:allied_api/src/model/permission_definition.dart';
 import 'package:allied_api/src/model/role_ref.dart';
@@ -33,10 +35,16 @@ ReturnType deserialize<ReturnType, BaseType>(
       return (valueString == 'true' || valueString == '1') as ReturnType;
     case 'double':
       return (value is double ? value : double.parse('$value')) as ReturnType;
+    case 'AuditEventView':
+      return AuditEventView.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'Bootstrap':
       return Bootstrap.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'MobileBootstrap':
       return MobileBootstrap.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PageResponseAuditEventView':
+      return PageResponseAuditEventView.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'PageResponseUserSummary':
       return PageResponseUserSummary.fromJson(value as Map<String, dynamic>)

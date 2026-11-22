@@ -10,13 +10,15 @@ import org.junit.jupiter.api.Test;
 class SystemRolesTest {
 
   @Test
-  void everyRolePermissionExistsInTheCatalogue() {
+  void everyIdentityPermissionOfARoleExistsInTheCatalogue() {
     Set<String> catalogue =
         IdentityPermissions.ALL.stream()
             .map(PermissionDefinition::code)
             .collect(java.util.stream.Collectors.toSet());
     for (SystemRoles.SystemRole role : SystemRoles.all()) {
-      assertThat(role.permissions()).as(role.code()).isSubsetOf(catalogue);
+      List<String> own =
+          role.permissions().stream().filter(code -> code.startsWith("identity:")).toList();
+      assertThat(own).as(role.code()).isSubsetOf(catalogue);
     }
   }
 

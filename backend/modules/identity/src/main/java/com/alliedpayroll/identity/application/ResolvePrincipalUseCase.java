@@ -48,7 +48,7 @@ public class ResolvePrincipalUseCase {
     return users
         .findByUsername(username)
         .filter(user -> !user.isLinked() && user.canSignIn())
-        .map(user -> linking.link(tenant, user, claims.subject()));
+        .map(user -> linking.link(tenant, user, claims.subject(), claims.channel().name()));
   }
 
   private Set<String> permissionsOf(AppUser user) {

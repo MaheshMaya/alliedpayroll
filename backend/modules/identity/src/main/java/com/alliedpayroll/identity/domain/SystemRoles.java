@@ -31,7 +31,10 @@ public final class SystemRoles {
               Set.of(
                   IdentityPermissions.USERS_READ,
                   IdentityPermissions.USERS_MANAGE,
-                  IdentityPermissions.ROLES_MANAGE)),
+                  IdentityPermissions.ROLES_MANAGE,
+                  // Declared by the audit module; identity only names them.
+                  "audit:read",
+                  "audit:security_read")),
           new SystemRole(PAYROLL, "Payroll", Set.of()),
           new SystemRole(HR, "HR", Set.of(IdentityPermissions.USERS_READ)),
           new SystemRole(SUPERVISOR, "Supervisor", Set.of()),

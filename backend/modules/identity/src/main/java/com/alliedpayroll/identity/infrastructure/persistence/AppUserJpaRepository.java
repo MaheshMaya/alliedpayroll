@@ -1,5 +1,7 @@
 package com.alliedpayroll.identity.infrastructure.persistence;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +15,6 @@ interface AppUserJpaRepository
   Optional<AppUserEntity> findByKeycloakSubjectAndDeletedAtIsNull(String subject);
 
   Optional<AppUserEntity> findByUsernameAndDeletedAtIsNull(String username);
+
+  List<AppUserEntity> findByIdIn(Collection<UUID> ids);
 }

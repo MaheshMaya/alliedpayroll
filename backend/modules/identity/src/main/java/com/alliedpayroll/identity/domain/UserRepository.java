@@ -1,6 +1,7 @@
 package com.alliedpayroll.identity.domain;
 
 import com.alliedpayroll.platform.core.ids.UserId;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -26,4 +27,8 @@ public interface UserRepository {
 
   /** Assigns the role unless the user already has it. */
   void assignRole(UserId userId, UUID roleId, UserId actor);
+
+  Map<UUID, String> displayNames(Collection<UUID> userIds);
+
+  void recordLogin(UserId userId, Instant at, String channel);
 }

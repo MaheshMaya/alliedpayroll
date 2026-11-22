@@ -24,15 +24,30 @@ public class EnsureSystemRolesUseCase {
     this.ids = ids;
   }
 
+  private static java.util.Set<String> missing(Role existing, SystemRoles.SystemRole template) {
+    java.util.Set<String> wanted = new java.util.HashSet<>(template.permissions());
+    wanted.removeAll(existing.permissions());
+    return wanted;
+  }
+
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void ensureForCurrentTenant() {
     roles.lockSeeding();
     for (SystemRoles.SystemRole template : SystemRoles.all()) {
-      if (roles.findByCode(template.code()).isEmpty()) {
-        roles.save(
-            new Role(
-                ids.next(), template.code(), template.name(), null, true, template.permissions()));
-      }
+      roles
+          .findByCode(template.code())
+          .ifPresentOrElse(
+              // A system role gains what newer modules added to its template; it never loses.
+              existing -> roles.grant(existing.id(), missing(existing, template)),
+              () ->
+                  roles.save(
+                      new Role(
+                          ids.next(),
+                          template.code(),
+                          template.name(),
+                          null,
+                          true,
+                          template.permissions())));
     }
   }
 }

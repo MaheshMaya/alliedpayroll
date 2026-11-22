@@ -23,6 +23,7 @@ spring:
       - classpath:db/migration/platform
       - classpath:db/migration/tenant
       - classpath:db/migration/identity
+      - classpath:db/migration/audit
     validate-migration-naming: true
   jpa:
     open-in-view: false
@@ -66,7 +67,7 @@ spring:
     # Absent, not null: the generated SDKs type optional fields as missing (headless-api §7).
     default-property-inclusion: non_null
   messages:
-    basename: i18n/platform/messages,i18n/tenant/messages,i18n/identity/messages
+    basename: i18n/platform/messages,i18n/tenant/messages,i18n/identity/messages,i18n/audit/messages
     fallback-to-system-locale: false
     encoding: UTF-8
   mvc:

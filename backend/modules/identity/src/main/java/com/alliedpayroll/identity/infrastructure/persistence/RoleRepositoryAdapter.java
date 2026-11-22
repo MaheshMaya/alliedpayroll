@@ -66,6 +66,18 @@ class RoleRepositoryAdapter implements RoleRepository {
 
   @Override
   @Transactional
+  public void grant(UUID roleId, Set<String> permissions) {
+    Instant now = clock.instant();
+    for (String permission : permissions) {
+      RolePermissionEntity.Key key = new RolePermissionEntity.Key(roleId, permission);
+      if (!grants.existsById(key)) {
+        grants.save(new RolePermissionEntity(roleId, permission, now, SystemActor.ID.value()));
+      }
+    }
+  }
+
+  @Override
+  @Transactional
   public void lockSeeding() {
     entityManager
         .createNativeQuery("SELECT pg_advisory_xact_lock(hashtext(:key))")

@@ -16,4 +16,7 @@ public interface RoleRepository {
 
   /** Holds the tenant's role-seeding lock until the current transaction ends. */
   void lockSeeding();
+
+  /** Adds permissions the role does not have yet. */
+  void grant(UUID roleId, java.util.Set<String> permissions);
 }

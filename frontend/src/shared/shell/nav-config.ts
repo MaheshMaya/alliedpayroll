@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 /** Built destinations; a nav item without one renders disabled. */
-export type NavPath = "/" | "/settings/users";
+export type NavPath = "/" | "/settings/users" | "/settings/audit";
 
 export interface NavLeaf {
   kind: "item";

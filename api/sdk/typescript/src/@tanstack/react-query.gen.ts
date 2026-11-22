@@ -14,6 +14,7 @@ import {
   getRole,
   getSession,
   getUser,
+  listAuditEvents,
   listPermissions,
   listRoles,
   listUsers,
@@ -31,6 +32,8 @@ import type {
   GetSessionResponse,
   GetUserData,
   GetUserResponse,
+  ListAuditEventsData,
+  ListAuditEventsResponse,
   ListPermissionsData,
   ListPermissionsResponse,
   ListRolesData,
@@ -394,3 +397,84 @@ export const getBootstrapOptions = (options?: Options<GetBootstrapData>) =>
     },
     queryKey: getBootstrapQueryKey(options),
   });
+
+export const listAuditEventsQueryKey = (
+  options?: Options<ListAuditEventsData>,
+) => createQueryKey("listAuditEvents", options);
+
+/**
+ * Trail of the tenant, newest first; security rows need audit:security_read
+ */
+export const listAuditEventsOptions = (
+  options?: Options<ListAuditEventsData>,
+) =>
+  queryOptions<
+    ListAuditEventsResponse,
+    DefaultError,
+    ListAuditEventsResponse,
+    ReturnType<typeof listAuditEventsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await listAuditEvents({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: listAuditEventsQueryKey(options),
+  });
+
+export const listAuditEventsInfiniteQueryKey = (
+  options?: Options<ListAuditEventsData>,
+): QueryKey<Options<ListAuditEventsData>> =>
+  createQueryKey("listAuditEvents", options, true);
+
+/**
+ * Trail of the tenant, newest first; security rows need audit:security_read
+ */
+export const listAuditEventsInfiniteOptions = (
+  options?: Options<ListAuditEventsData>,
+) => {
+  const opts = infiniteQueryOptions<
+    ListAuditEventsResponse,
+    DefaultError,
+    InfiniteData<ListAuditEventsResponse>,
+    QueryKey<Options<ListAuditEventsData>>,
+    | string
+    | null
+    | Pick<
+        QueryKey<Options<ListAuditEventsData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<ListAuditEventsData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  cursor: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await listAuditEvents({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: listAuditEventsInfiniteQueryKey(options),
+    },
+  );
+  return opts as Omit<typeof opts, "initialData">;
+};

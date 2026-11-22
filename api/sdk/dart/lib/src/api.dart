@@ -7,6 +7,7 @@ import 'package:allied_api/src/auth/api_key_auth.dart';
 import 'package:allied_api/src/auth/basic_auth.dart';
 import 'package:allied_api/src/auth/bearer_auth.dart';
 import 'package:allied_api/src/auth/oauth.dart';
+import 'package:allied_api/src/api/audit_api.dart';
 import 'package:allied_api/src/api/bootstrap_api.dart';
 import 'package:allied_api/src/api/mobile_api.dart';
 import 'package:allied_api/src/api/roles_api.dart';
@@ -134,6 +135,12 @@ class AlliedApi {
           .apiKeys
           .remove(name);
     }
+  }
+
+  /// Get AuditApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  AuditApi getAuditApi() {
+    return AuditApi(dio);
   }
 
   /// Get BootstrapApi instance, base route and serializer can be overridden by a given but be careful,

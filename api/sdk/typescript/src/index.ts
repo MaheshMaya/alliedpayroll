@@ -6,6 +6,7 @@ export {
   getRole,
   getSession,
   getUser,
+  listAuditEvents,
   listPermissions,
   listRoles,
   listUsers,
@@ -13,6 +14,7 @@ export {
   type Options,
 } from "./sdk.gen";
 export type {
+  AuditEventView,
   Bootstrap,
   ClientOptions,
   GetBootstrapData,
@@ -30,6 +32,9 @@ export type {
   GetUserData,
   GetUserResponse,
   GetUserResponses,
+  ListAuditEventsData,
+  ListAuditEventsResponse,
+  ListAuditEventsResponses,
   ListPermissionsData,
   ListPermissionsResponse,
   ListPermissionsResponses,
@@ -42,6 +47,7 @@ export type {
   LoginData,
   LoginResponses,
   MobileBootstrap,
+  PageResponseAuditEventView,
   PageResponseUserSummary,
   PermissionDefinition,
   RoleRef,

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -46,6 +47,10 @@ public class CurrentUserProvider {
         switch (authentication) {
           case JwtAuthenticationToken token -> Optional.of(fromJwt(token.getToken()));
           case OAuth2AuthenticationToken token when token.getPrincipal() instanceof OidcUser user ->
+              Optional.of(fromSession(user));
+          // What the login filter authenticates, before it becomes the session token.
+          case OAuth2LoginAuthenticationToken token
+              when token.getPrincipal() instanceof OidcUser user ->
               Optional.of(fromSession(user));
           case null, default -> Optional.empty();
         };

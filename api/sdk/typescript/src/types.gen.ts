@@ -102,6 +102,53 @@ export type User = {
   email?: string;
 };
 
+export type AuditEventView = {
+  id: string;
+  occurredAt: string;
+  action:
+    | "CREATE"
+    | "UPDATE"
+    | "DELETE"
+    | "STATE_CHANGE"
+    | "LOGIN"
+    | "LOGIN_FAILED"
+    | "LOGOUT"
+    | "OTP_SENT"
+    | "OTP_FAILED"
+    | "AUTHZ_DENIED"
+    | "PII_REVEAL"
+    | "EXPORT"
+    | "IMPORT_COMMIT"
+    | "APPROVE"
+    | "REJECT";
+  entityType?: string;
+  entityId?: string;
+  entityLabel?: string;
+  actorType: "USER" | "SYSTEM" | "DEVICE" | "PARTNER";
+  actorId: string;
+  actorDisplayName?: string;
+  channel: string;
+  clientIp?: string;
+  changedFields: Array<string>;
+  oldValues?: {
+    [key: string]: unknown;
+  };
+  newValues?: {
+    [key: string]: unknown;
+  };
+  reasonKey?: string;
+  reasonParams: {
+    [key: string]: unknown;
+  };
+  note?: string;
+};
+
+export type PageResponseAuditEventView = {
+  items: Array<AuditEventView>;
+  nextCursor?: string;
+  totalCount: number;
+};
+
 export type GetSessionData = {
   body?: never;
   path?: never;
@@ -261,3 +308,44 @@ export type GetBootstrapResponses = {
 
 export type GetBootstrapResponse =
   GetBootstrapResponses[keyof GetBootstrapResponses];
+
+export type ListAuditEventsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    "filter[action]"?:
+      | "CREATE"
+      | "UPDATE"
+      | "DELETE"
+      | "STATE_CHANGE"
+      | "LOGIN"
+      | "LOGIN_FAILED"
+      | "LOGOUT"
+      | "OTP_SENT"
+      | "OTP_FAILED"
+      | "AUTHZ_DENIED"
+      | "PII_REVEAL"
+      | "EXPORT"
+      | "IMPORT_COMMIT"
+      | "APPROVE"
+      | "REJECT";
+    "filter[actorId]"?: string | null;
+    "filter[entityType]"?: string | null;
+    "filter[entityId]"?: string | null;
+    from?: string | null;
+    to?: string | null;
+    cursor?: string | null;
+    size?: number;
+  };
+  url: "/api/v1/audit-events";
+};
+
+export type ListAuditEventsResponses = {
+  /**
+   * OK
+   */
+  200: PageResponseAuditEventView;
+};
+
+export type ListAuditEventsResponse =
+  ListAuditEventsResponses[keyof ListAuditEventsResponses];

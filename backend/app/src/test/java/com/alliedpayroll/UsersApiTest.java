@@ -49,6 +49,8 @@ class UsersApiTest {
   // Filled by the seed before any test runs.
   private static @Nullable UserId sentinelAdmin;
   private static @Nullable UserId sentinelGuard;
+  // Signed in by this class only, so its first sign-in is observed here.
+  private static @Nullable UserId sentinelOps;
 
   @Autowired private MockMvc mvc;
   @MockitoBean private JwtDecoder jwtDecoder;
@@ -89,6 +91,14 @@ class UsersApiTest {
                       "guard@sentinel.example",
                       UserType.EMPLOYEE,
                       Set.of("EMPLOYEE")));
+          sentinelOps =
+              users.ensureUser(
+                  new EnsureUser(
+                      "ops.sentinel",
+                      "Nitya Rao",
+                      "ops@sentinel.example",
+                      UserType.EMPLOYEE,
+                      Set.of("EMPLOYEE")));
         });
     TenantSummary nimbus =
         provisioning.provision(
@@ -112,11 +122,13 @@ class UsersApiTest {
                 .header("Host", "sentinel.localhost")
                 .with(signedIn("sentinel", "admin.sentinel")))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.totalCount").value(3))
-        .andExpect(jsonPath("$.items", hasSize(3)))
+        .andExpect(jsonPath("$.totalCount").value(4))
+        .andExpect(jsonPath("$.items", hasSize(4)))
         .andExpect(
             jsonPath("$.items[*].username")
-                .value(containsInAnyOrder("admin.sentinel", "hr.sentinel", "guard.sentinel")))
+                .value(
+                    containsInAnyOrder(
+                        "admin.sentinel", "hr.sentinel", "guard.sentinel", "ops.sentinel")))
         .andExpect(
             jsonPath("$.items[?(@.username=='admin.sentinel')].roles[0].code")
                 .value(hasItem("TENANT_ADMIN")))
@@ -129,8 +141,9 @@ class UsersApiTest {
 
   @Test
   void theFirstRequestLinksTheKeycloakSubjectAndActivatesTheUser() throws Exception {
+    String ops = Objects.requireNonNull(sentinelOps).value().toString();
     mvc.perform(
-            get("/api/v1/users/" + Objects.requireNonNull(sentinelGuard).value())
+            get("/api/v1/users/" + ops)
                 .header("Host", "sentinel.localhost")
                 .with(signedIn("sentinel", "admin.sentinel")))
         .andExpect(status().isOk())
@@ -140,12 +153,12 @@ class UsersApiTest {
     mvc.perform(
             get("/api/v1/bootstrap")
                 .header("Host", "sentinel.localhost")
-                .with(signedIn("sentinel", "guard.sentinel")))
+                .with(signedIn("sentinel", "ops.sentinel")))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.permissions", hasSize(0)));
 
     mvc.perform(
-            get("/api/v1/users/" + Objects.requireNonNull(sentinelGuard).value())
+            get("/api/v1/users/" + ops)
                 .header("Host", "sentinel.localhost")
                 .with(signedIn("sentinel", "admin.sentinel")))
         .andExpect(status().isOk())
@@ -230,13 +243,16 @@ class UsersApiTest {
         .andExpect(jsonPath("$.items", hasSize(1)))
         .andExpect(jsonPath("$.items[0].username").value("hr.sentinel"));
 
+    // Other test classes sign some of these people in, so the filter is checked by shape, not by
+    // name.
     mvc.perform(
             get("/api/v1/users")
-                .param("filter[status]", "INVITED")
+                .param("filter[status]", "ACTIVE")
                 .header("Host", "sentinel.localhost")
                 .with(signedIn("sentinel", "admin.sentinel")))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.items[*].username").value(hasItem("hr.sentinel")));
+        .andExpect(jsonPath("$.items[*].username").value(hasItem("admin.sentinel")))
+        .andExpect(jsonPath("$.items[?(@.status!='ACTIVE')]").isEmpty());
 
     mvc.perform(
             get("/api/v1/users")
@@ -246,7 +262,7 @@ class UsersApiTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.items", hasSize(2)))
         .andExpect(jsonPath("$.nextCursor").value("1"))
-        .andExpect(jsonPath("$.totalCount").value(3));
+        .andExpect(jsonPath("$.totalCount").value(4));
   }
 
   @Test

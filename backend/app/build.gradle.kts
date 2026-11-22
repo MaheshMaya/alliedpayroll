@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":platform:common-events"))
     implementation(project(":modules:tenant"))
     implementation(project(":modules:identity"))
+    implementation(project(":modules:audit"))
     implementation(project(":channels:web-channel"))
     implementation(project(":channels:mobile-channel"))
 
@@ -32,6 +33,7 @@ dependencies {
     testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.spring.boot.starter.security.test)
     testImplementation(libs.spring.boot.starter.oauth2.resource.server)
+    testImplementation(libs.spring.boot.starter.oauth2.client)
     testImplementation(libs.spring.boot.starter.flyway.test)
 }
 

@@ -111,6 +111,24 @@ class UserRepositoryAdapter implements UserRepository {
   }
 
   @Override
+  public Map<UUID, String> displayNames(Collection<UUID> userIds) {
+    if (userIds.isEmpty()) {
+      return Map.of();
+    }
+    Map<UUID, String> names = new HashMap<>();
+    for (AppUserEntity user : users.findByIdIn(userIds)) {
+      names.put(user.id(), user.displayName());
+    }
+    return names;
+  }
+
+  @Override
+  @Transactional
+  public void recordLogin(UserId userId, Instant at, String channel) {
+    users.findById(userId.value()).ifPresent(user -> user.recordLogin(at, channel));
+  }
+
+  @Override
   @Transactional
   public void assignRole(UserId userId, UUID roleId, UserId actor) {
     UserRoleEntity.Key key = new UserRoleEntity.Key(userId.value(), roleId);

@@ -63,6 +63,9 @@ class AppUserEntity {
   @Column(name = "last_login_at")
   private @Nullable Instant lastLoginAt;
 
+  @Column(name = "last_login_channel", length = 12)
+  private @Nullable String lastLoginChannel;
+
   @Version private long version;
 
   @Column(name = "created_at", nullable = false)
@@ -115,6 +118,16 @@ class AppUserEntity {
     this.lastLoginAt = user.lastLoginAt();
     this.updatedAt = now;
     this.updatedBy = actor;
+  }
+
+  void recordLogin(Instant at, String channel) {
+    this.lastLoginAt = at;
+    this.lastLoginChannel = channel;
+    this.updatedAt = at;
+  }
+
+  String displayName() {
+    return displayName;
   }
 
   AppUser toDomain() {

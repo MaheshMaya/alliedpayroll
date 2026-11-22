@@ -28,6 +28,7 @@ include(
     "platform:common-test",
     "modules:tenant",
     "modules:identity",
+    "modules:audit",
     "channels:web-channel",
     "channels:mobile-channel",
 )
