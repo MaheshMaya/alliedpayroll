@@ -9,25 +9,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.alliedpayroll.identity.api.UserAdministration;
-import com.alliedpayroll.identity.api.UserAdministration.EnsureUser;
-import com.alliedpayroll.identity.api.UserType;
 import com.alliedpayroll.platform.core.audit.AuditAction;
 import com.alliedpayroll.platform.core.audit.AuditActor;
 import com.alliedpayroll.platform.core.audit.AuditEntry;
 import com.alliedpayroll.platform.core.audit.AuditSink;
-import com.alliedpayroll.platform.core.ids.TenantId;
 import com.alliedpayroll.platform.core.ids.UserId;
 import com.alliedpayroll.platform.tenancy.CurrentTenant;
 import com.alliedpayroll.platform.tenancy.TenantContext;
 import com.alliedpayroll.platform.test.PostgresTestDatabase;
 import com.alliedpayroll.tenant.api.TenantProvisioning;
-import com.alliedpayroll.tenant.api.TenantProvisioning.ProvisionTenant;
-import com.alliedpayroll.tenant.api.TenantSummary;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,32 +67,9 @@ class AuditApiTest {
   @BeforeAll
   static void seed(
       @Autowired TenantProvisioning provisioning, @Autowired UserAdministration users) {
-    TenantSummary summary =
-        provisioning.provision(new ProvisionTenant("sentinel", "Sentinel", "STAFFING", "sentinel"));
-    sentinel = new CurrentTenant(new TenantId(summary.id()), summary.slug());
-    TenantContext.runAs(
-        sentinel,
-        () -> {
-          users.ensureUser(
-              new EnsureUser(
-                  "admin.sentinel", "Asha Varma", null, UserType.ADMIN, Set.of("TENANT_ADMIN")));
-          hr =
-              users.ensureUser(
-                  new EnsureUser(
-                      "hr.sentinel", "Meera Nair", null, UserType.MANAGER, Set.of("HR")));
-          users.ensureUser(
-              new EnsureUser(
-                  "guard.sentinel", "Suresh Kumar", null, UserType.EMPLOYEE, Set.of("EMPLOYEE")));
-        });
-    TenantSummary nimbus =
-        provisioning.provision(
-            new ProvisionTenant("nimbus-it", "Nimbus IT", "CORPORATE", "nimbus-it"));
-    TenantContext.runAs(
-        new CurrentTenant(new TenantId(nimbus.id()), nimbus.slug()),
-        () ->
-            users.ensureUser(
-                new EnsureUser(
-                    "admin.nimbus", "Divya Menon", null, UserType.ADMIN, Set.of("TENANT_ADMIN"))));
+    DemoPeople.Tenants seeded = DemoPeople.seed(provisioning, users);
+    sentinel = seeded.sentinel();
+    hr = seeded.user("hr.sentinel");
   }
 
   @Test

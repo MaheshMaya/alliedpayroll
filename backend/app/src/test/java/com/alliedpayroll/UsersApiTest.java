@@ -9,19 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.alliedpayroll.identity.api.UserAdministration;
-import com.alliedpayroll.identity.api.UserAdministration.EnsureUser;
-import com.alliedpayroll.identity.api.UserType;
-import com.alliedpayroll.platform.core.ids.TenantId;
 import com.alliedpayroll.platform.core.ids.UserId;
-import com.alliedpayroll.platform.tenancy.CurrentTenant;
-import com.alliedpayroll.platform.tenancy.TenantContext;
 import com.alliedpayroll.platform.test.PostgresTestDatabase;
 import com.alliedpayroll.tenant.api.TenantProvisioning;
-import com.alliedpayroll.tenant.api.TenantProvisioning.ProvisionTenant;
-import com.alliedpayroll.tenant.api.TenantSummary;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,7 +40,6 @@ class UsersApiTest {
 
   // Filled by the seed before any test runs.
   private static @Nullable UserId sentinelAdmin;
-  private static @Nullable UserId sentinelGuard;
   // Signed in by this class only, so its first sign-in is observed here.
   private static @Nullable UserId sentinelOps;
 
@@ -63,56 +54,9 @@ class UsersApiTest {
   @BeforeAll
   static void seed(
       @Autowired TenantProvisioning provisioning, @Autowired UserAdministration users) {
-    TenantSummary sentinel =
-        provisioning.provision(new ProvisionTenant("sentinel", "Sentinel", "STAFFING", "sentinel"));
-    TenantContext.runAs(
-        tenant(sentinel),
-        () -> {
-          sentinelAdmin =
-              users.ensureUser(
-                  new EnsureUser(
-                      "admin.sentinel",
-                      "Asha Varma",
-                      "admin@sentinel.example",
-                      UserType.ADMIN,
-                      Set.of("TENANT_ADMIN")));
-          users.ensureUser(
-              new EnsureUser(
-                  "hr.sentinel",
-                  "Meera Nair",
-                  "hr@sentinel.example",
-                  UserType.MANAGER,
-                  Set.of("HR")));
-          sentinelGuard =
-              users.ensureUser(
-                  new EnsureUser(
-                      "guard.sentinel",
-                      "Suresh Kumar",
-                      "guard@sentinel.example",
-                      UserType.EMPLOYEE,
-                      Set.of("EMPLOYEE")));
-          sentinelOps =
-              users.ensureUser(
-                  new EnsureUser(
-                      "ops.sentinel",
-                      "Nitya Rao",
-                      "ops@sentinel.example",
-                      UserType.EMPLOYEE,
-                      Set.of("EMPLOYEE")));
-        });
-    TenantSummary nimbus =
-        provisioning.provision(
-            new ProvisionTenant("nimbus-it", "Nimbus IT", "CORPORATE", "nimbus-it"));
-    TenantContext.runAs(
-        tenant(nimbus),
-        () ->
-            users.ensureUser(
-                new EnsureUser(
-                    "admin.nimbus",
-                    "Divya Menon",
-                    "admin@nimbus-it.example",
-                    UserType.ADMIN,
-                    Set.of("TENANT_ADMIN"))));
+    DemoPeople.Tenants seeded = DemoPeople.seed(provisioning, users);
+    sentinelAdmin = seeded.user("admin.sentinel");
+    sentinelOps = seeded.user("ops.sentinel");
   }
 
   @Test
@@ -122,13 +66,17 @@ class UsersApiTest {
                 .header("Host", "sentinel.localhost")
                 .with(signedIn("sentinel", "admin.sentinel")))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.totalCount").value(4))
-        .andExpect(jsonPath("$.items", hasSize(4)))
+        .andExpect(jsonPath("$.totalCount").value(5))
+        .andExpect(jsonPath("$.items", hasSize(5)))
         .andExpect(
             jsonPath("$.items[*].username")
                 .value(
                     containsInAnyOrder(
-                        "admin.sentinel", "hr.sentinel", "guard.sentinel", "ops.sentinel")))
+                        "admin.sentinel",
+                        "hr.sentinel",
+                        "guard.sentinel",
+                        "ops.sentinel",
+                        "payroll.sentinel")))
         .andExpect(
             jsonPath("$.items[?(@.username=='admin.sentinel')].roles[0].code")
                 .value(hasItem("TENANT_ADMIN")))
@@ -136,7 +84,7 @@ class UsersApiTest {
             jsonPath("$.items[?(@.username=='admin.sentinel')].emailMasked")
                 .value(hasItem("a***@sentinel.example")))
         // Absent, not null: the SDKs type optional fields as missing.
-        .andExpect(jsonPath("$.items[?(@.username=='hr.sentinel')].lastLoginAt").isEmpty());
+        .andExpect(jsonPath("$.items[?(@.username=='payroll.sentinel')].lastLoginAt").isEmpty());
   }
 
   @Test
@@ -262,7 +210,7 @@ class UsersApiTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.items", hasSize(2)))
         .andExpect(jsonPath("$.nextCursor").value("1"))
-        .andExpect(jsonPath("$.totalCount").value(4));
+        .andExpect(jsonPath("$.totalCount").value(5));
   }
 
   @Test
@@ -286,10 +234,6 @@ class UsersApiTest {
         .andExpect(jsonPath("$[*].code").value(hasItem("identity:users_read")))
         .andExpect(
             jsonPath("$[?(@.code=='identity:users_read')].moduleCode").value(hasItem("IDENTITY")));
-  }
-
-  private static CurrentTenant tenant(TenantSummary summary) {
-    return new CurrentTenant(new TenantId(summary.id()), summary.slug());
   }
 
   /** A Keycloak token of a member of the organisation, as the mobile client would present it. */
