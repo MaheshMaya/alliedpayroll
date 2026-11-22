@@ -32,9 +32,10 @@ public final class SystemRoles {
                   IdentityPermissions.USERS_READ,
                   IdentityPermissions.USERS_MANAGE,
                   IdentityPermissions.ROLES_MANAGE,
-                  // Declared by the audit module; identity only names them.
+                  // Declared by the audit and tenant modules; identity only names them.
                   "audit:read",
-                  "audit:security_read")),
+                  "audit:security_read",
+                  "tenant:settings_manage")),
           new SystemRole(PAYROLL, "Payroll", Set.of()),
           new SystemRole(HR, "HR", Set.of(IdentityPermissions.USERS_READ)),
           new SystemRole(SUPERVISOR, "Supervisor", Set.of()),

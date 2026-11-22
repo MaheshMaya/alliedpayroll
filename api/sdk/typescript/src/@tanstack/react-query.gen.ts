@@ -17,16 +17,20 @@ import {
   getMobileBootstrap,
   getRole,
   getSession,
+  getTerminology,
   getUser,
   inviteUser,
   listAuditEvents,
+  listModules,
   listPermissions,
   listRoles,
   listUsers,
   login,
   type Options,
+  relabelTerminology,
   replaceRolePermissions,
   replaceUserRoles,
+  setModule,
   updateRole,
 } from "../sdk.gen";
 import type {
@@ -44,12 +48,16 @@ import type {
   GetRoleResponse,
   GetSessionData,
   GetSessionResponse,
+  GetTerminologyData,
+  GetTerminologyResponse,
   GetUserData,
   GetUserResponse,
   InviteUserData,
   InviteUserResponse,
   ListAuditEventsData,
   ListAuditEventsResponse,
+  ListModulesData,
+  ListModulesResponse,
   ListPermissionsData,
   ListPermissionsResponse,
   ListRolesData,
@@ -57,10 +65,14 @@ import type {
   ListUsersData,
   ListUsersResponse,
   LoginData,
+  RelabelTerminologyData,
+  RelabelTerminologyResponse,
   ReplaceRolePermissionsData,
   ReplaceRolePermissionsResponse,
   ReplaceUserRolesData,
   ReplaceUserRolesResponse,
+  SetModuleData,
+  SetModuleResponse,
   UpdateRoleData,
   UpdateRoleResponse,
 } from "../types.gen";
@@ -132,6 +144,58 @@ const createQueryKey = <TOptions extends Options>(
   return [params];
 };
 
+export const getTerminologyQueryKey = (options: Options<GetTerminologyData>) =>
+  createQueryKey("getTerminology", options);
+
+/**
+ * Every relabelable term in one locale
+ */
+export const getTerminologyOptions = (options: Options<GetTerminologyData>) =>
+  queryOptions<
+    GetTerminologyResponse,
+    DefaultError,
+    GetTerminologyResponse,
+    ReturnType<typeof getTerminologyQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getTerminology({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getTerminologyQueryKey(options),
+  });
+
+/**
+ * Set the tenant's labels for some terms in one locale
+ */
+export const relabelTerminologyMutation = (
+  options?: Partial<Options<RelabelTerminologyData>>,
+): UseMutationOptions<
+  RelabelTerminologyResponse,
+  DefaultError,
+  Options<RelabelTerminologyData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    RelabelTerminologyResponse,
+    DefaultError,
+    Options<RelabelTerminologyData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await relabelTerminology({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
 export const getRoleQueryKey = (options: Options<GetRoleData>) =>
   createQueryKey("getRole", options);
 
@@ -201,6 +265,33 @@ export const replaceRolePermissionsMutation = (
   > = {
     mutationFn: async (fnOptions) => {
       const { data } = await replaceRolePermissions({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+/**
+ * Switch an optional module on or off
+ */
+export const setModuleMutation = (
+  options?: Partial<Options<SetModuleData>>,
+): UseMutationOptions<
+  SetModuleResponse,
+  DefaultError,
+  Options<SetModuleData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    SetModuleResponse,
+    DefaultError,
+    Options<SetModuleData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await setModule({
         ...options,
         ...fnOptions,
         throwOnError: true,
@@ -554,6 +645,31 @@ export const listPermissionsOptions = (
       return data;
     },
     queryKey: listPermissionsQueryKey(options),
+  });
+
+export const listModulesQueryKey = (options?: Options<ListModulesData>) =>
+  createQueryKey("listModules", options);
+
+/**
+ * Every optional module and whether it is on
+ */
+export const listModulesOptions = (options?: Options<ListModulesData>) =>
+  queryOptions<
+    ListModulesResponse,
+    DefaultError,
+    ListModulesResponse,
+    ReturnType<typeof listModulesQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await listModules({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: listModulesQueryKey(options),
   });
 
 export const getMobileBootstrapQueryKey = (

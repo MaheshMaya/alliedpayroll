@@ -1,0 +1,29 @@
+{
+  "en-IN": {
+    "client": "Client", "client.plural": "Clients",
+    "site": "Site", "site.plural": "Sites",
+    "site_sub_unit": "Sub-unit", "site_sub_unit.plural": "Sub-units",
+    "work_location": "Work location", "work_location.plural": "Work locations",
+    "engagement": "Contract", "engagement.plural": "Contracts",
+    "duty": "Duty", "duty.plural": "Duties",
+    "org_unit": "Department", "org_unit.plural": "Departments"
+  },
+  "hi": {
+    "client": "ग्राहक", "client.plural": "ग्राहक",
+    "site": "साइट", "site.plural": "साइटें",
+    "site_sub_unit": "उप-इकाई", "site_sub_unit.plural": "उप-इकाइयाँ",
+    "work_location": "कार्यस्थल", "work_location.plural": "कार्यस्थल",
+    "engagement": "अनुबंध", "engagement.plural": "अनुबंध",
+    "duty": "ड्यूटी", "duty.plural": "ड्यूटी",
+    "org_unit": "विभाग", "org_unit.plural": "विभाग"
+  },
+  "ta": {
+    "client": "வாடிக்கையாளர்", "client.plural": "வாடிக்கையாளர்கள்",
+    "site": "தளம்", "site.plural": "தளங்கள்",
+    "site_sub_unit": "துணை அலகு", "site_sub_unit.plural": "துணை அலகுகள்",
+    "work_location": "பணியிடம்", "work_location.plural": "பணியிடங்கள்",
+    "engagement": "ஒப்பந்தம்", "engagement.plural": "ஒப்பந்தங்கள்",
+    "duty": "பணி", "duty.plural": "பணிகள்",
+    "org_unit": "துறை", "org_unit.plural": "துறைகள்"
+  }
+}

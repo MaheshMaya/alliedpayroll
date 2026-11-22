@@ -4,6 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 
 import { useBootstrap } from "@/shared/data/bootstrap-context";
 import { currentPeriodLabel } from "@/shared/i18n/periods";
+import { useTerms } from "@/shared/i18n/terminology";
 
 /**
  * Global context bar from Figma (7:112): the four scope selectors and the search trigger. In
@@ -12,7 +13,8 @@ import { currentPeriodLabel } from "@/shared/i18n/periods";
  */
 export function ContextBar() {
   const intl = useIntl();
-  const { tenant } = useBootstrap();
+  const { tenant, features } = useBootstrap();
+  const terms = useTerms();
   // The period chip reads the clock once per mount; a real selector replaces it with URL state.
   const [today] = useState(() => new Date());
   const chips = [
@@ -31,11 +33,19 @@ export function ContextBar() {
       labelId: "shell.context.period",
       value: currentPeriodLabel(intl, today),
     },
-    {
-      id: "client",
-      labelId: "shell.context.client",
-      value: intl.formatMessage({ id: "shell.context.allClients" }),
-    },
+    // A tenant without clients and sites has no client scope to pick.
+    ...(features["module:CUSTOMERS"] === true
+      ? [
+          {
+            id: "client",
+            labelId: "shell.context.client",
+            value: intl.formatMessage(
+              { id: "shell.context.allClients" },
+              terms,
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -49,7 +59,7 @@ export function ContextBar() {
         >
           <span className="flex flex-col">
             <span className="text-overline tracking-[0.04em] text-text-muted uppercase">
-              <FormattedMessage id={chip.labelId} />
+              <FormattedMessage id={chip.labelId} values={terms} />
             </span>
             <span className="text-bodyStrong text-text-default">
               {chip.value}

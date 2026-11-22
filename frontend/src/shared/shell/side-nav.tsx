@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import { useBootstrap } from "@/shared/data/bootstrap-context";
+import { useTerms } from "@/shared/i18n/terminology";
 import { initialsOf } from "@/shared/ui/avatar";
 import { cn } from "@/shared/ui/cn";
 
@@ -118,7 +119,8 @@ const rowClass =
 
 function Leaf({ item, collapsed }: { item: NavLeaf; collapsed: boolean }) {
   const intl = useIntl();
-  const label = intl.formatMessage({ id: item.labelId });
+  const terms = useTerms();
+  const label = intl.formatMessage({ id: item.labelId }, terms);
   const Icon = item.icon;
   const content = (
     <>
@@ -173,7 +175,8 @@ function Group({
   onToggle: () => void;
 }) {
   const intl = useIntl();
-  const label = intl.formatMessage({ id: group.labelId });
+  const terms = useTerms();
+  const label = intl.formatMessage({ id: group.labelId }, terms);
   const Icon = group.icon;
   const panelId = `nav-group-${group.id}`;
   return (
@@ -207,7 +210,7 @@ function Group({
                 aria-disabled="true"
                 className="flex h-8 w-full cursor-not-allowed items-center rounded-md pr-3 pl-[42px] text-body opacity-60"
               >
-                <FormattedMessage id={child.labelId} />
+                <FormattedMessage id={child.labelId} values={terms} />
               </span>
             </li>
           ))}

@@ -11,6 +11,7 @@ import com.alliedpayroll.tenant.api.TenantSummary;
 import com.alliedpayroll.tenant.domain.Tenant;
 import com.alliedpayroll.tenant.domain.TenantRepository;
 import java.util.Map;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +22,17 @@ class BootstrapUseCase implements BootstrapService {
   private final TenantRepository tenants;
   private final FeatureFlags featureFlags;
   private final CurrentUserProvider users;
+  private final TerminologyUseCase terminology;
 
-  BootstrapUseCase(TenantRepository tenants, FeatureFlags featureFlags, CurrentUserProvider users) {
+  BootstrapUseCase(
+      TenantRepository tenants,
+      FeatureFlags featureFlags,
+      CurrentUserProvider users,
+      TerminologyUseCase terminology) {
     this.tenants = tenants;
     this.featureFlags = featureFlags;
     this.users = users;
+    this.terminology = terminology;
   }
 
   @Override
@@ -47,7 +54,8 @@ class BootstrapUseCase implements BootstrapService {
             user.displayName(),
             user.email()),
         user.permissions(),
-        features);
+        features,
+        terminology.closestTo(LocaleContextHolder.getLocale()).labels());
   }
 
   static TenantSummary summaryOf(Tenant tenant) {

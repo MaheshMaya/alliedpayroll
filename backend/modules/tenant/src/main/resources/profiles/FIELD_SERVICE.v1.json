@@ -1,0 +1,36 @@
+{
+  "code": "FIELD_SERVICE",
+  "version": 1,
+  "name": "Projects and field service",
+  "modules": {
+    "CUSTOMERS": true, "PROJECTS": true, "TIMESHEETS": true, "BILLING": true, "FIELD_OPS": true,
+    "ORG_UNITS": true, "INVENTORY": true, "PURCHASE": true, "CONTRACTS": false, "SHIFTS": false
+  },
+  "terminology": {
+    "en-IN": {
+      "client": "Customer", "client.plural": "Customers",
+      "site": "Plant", "site.plural": "Plants",
+      "site_sub_unit": "Equipment", "site_sub_unit.plural": "Equipment",
+      "work_location": "Site", "work_location.plural": "Sites",
+      "engagement": "Work order", "engagement.plural": "Work orders",
+      "duty": "Man-day", "duty.plural": "Man-days",
+      "org_unit": "Division", "org_unit.plural": "Divisions"
+    },
+    "hi": {
+      "site": "संयंत्र", "site.plural": "संयंत्र",
+      "site_sub_unit": "उपकरण", "site_sub_unit.plural": "उपकरण",
+      "work_location": "साइट", "work_location.plural": "साइटें",
+      "engagement": "कार्य आदेश", "engagement.plural": "कार्य आदेश",
+      "duty": "मानव-दिवस", "duty.plural": "मानव-दिवस",
+      "org_unit": "प्रभाग", "org_unit.plural": "प्रभाग"
+    },
+    "ta": {
+      "site": "ஆலை", "site.plural": "ஆலைகள்",
+      "site_sub_unit": "உபகரணம்", "site_sub_unit.plural": "உபகரணங்கள்",
+      "work_location": "தளம்", "work_location.plural": "தளங்கள்",
+      "engagement": "பணி ஆணை", "engagement.plural": "பணி ஆணைகள்",
+      "duty": "மனித நாள்", "duty.plural": "மனித நாட்கள்",
+      "org_unit": "பிரிவு", "org_unit.plural": "பிரிவுகள்"
+    }
+  }
+}

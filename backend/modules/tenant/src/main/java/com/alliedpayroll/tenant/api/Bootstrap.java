@@ -7,10 +7,17 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * The first response every client fetches after sign-in: who the user is, which tenant they are in,
- * what they may do and which modules are on.
+ * what they may do, which modules are on and the tenant's words for the canonical concepts.
+ *
+ * @param terminology label by concept key ({@code site}, {@code site.plural}, ...) in the locale
+ *     closest to the request's
  */
 public record Bootstrap(
-    TenantSummary tenant, User user, Set<String> permissions, Map<String, Boolean> features) {
+    TenantSummary tenant,
+    User user,
+    Set<String> permissions,
+    Map<String, Boolean> features,
+    Map<String, String> terminology) {
 
   /**
    * The signed-in person.

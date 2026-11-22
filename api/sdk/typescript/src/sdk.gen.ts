@@ -23,12 +23,16 @@ import type {
   GetRoleResponses,
   GetSessionData,
   GetSessionResponses,
+  GetTerminologyData,
+  GetTerminologyResponses,
   GetUserData,
   GetUserResponses,
   InviteUserData,
   InviteUserResponses,
   ListAuditEventsData,
   ListAuditEventsResponses,
+  ListModulesData,
+  ListModulesResponses,
   ListPermissionsData,
   ListPermissionsResponses,
   ListRolesData,
@@ -37,10 +41,14 @@ import type {
   ListUsersResponses,
   LoginData,
   LoginResponses,
+  RelabelTerminologyData,
+  RelabelTerminologyResponses,
   ReplaceRolePermissionsData,
   ReplaceRolePermissionsResponses,
   ReplaceUserRolesData,
   ReplaceUserRolesResponses,
+  SetModuleData,
+  SetModuleResponses,
   UpdateRoleData,
   UpdateRoleResponses,
 } from "./types.gen";
@@ -75,6 +83,37 @@ export const replaceUserRoles = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     url: "/api/v1/users/{id}/roles",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+/**
+ * Every relabelable term in one locale
+ */
+export const getTerminology = <ThrowOnError extends boolean = false>(
+  options: Options<GetTerminologyData, ThrowOnError>,
+): RequestResult<GetTerminologyResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).get<
+    GetTerminologyResponses,
+    unknown,
+    ThrowOnError
+  >({ url: "/api/v1/terminology/{locale}", ...options });
+
+/**
+ * Set the tenant's labels for some terms in one locale
+ */
+export const relabelTerminology = <ThrowOnError extends boolean = false>(
+  options: Options<RelabelTerminologyData, ThrowOnError>,
+): RequestResult<RelabelTerminologyResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).put<
+    RelabelTerminologyResponses,
+    unknown,
+    ThrowOnError
+  >({
+    url: "/api/v1/terminology/{locale}",
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -120,6 +159,21 @@ export const replaceRolePermissions = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     url: "/api/v1/roles/{id}/permissions",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+/**
+ * Switch an optional module on or off
+ */
+export const setModule = <ThrowOnError extends boolean = false>(
+  options: Options<SetModuleData, ThrowOnError>,
+): RequestResult<SetModuleResponses, unknown, ThrowOnError> =>
+  (options.client ?? client).put<SetModuleResponses, unknown, ThrowOnError>({
+    url: "/api/v1/modules/{code}",
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -245,6 +299,17 @@ export const listPermissions = <ThrowOnError extends boolean = false>(
     unknown,
     ThrowOnError
   >({ url: "/api/v1/permissions", ...options });
+
+/**
+ * Every optional module and whether it is on
+ */
+export const listModules = <ThrowOnError extends boolean = false>(
+  options?: Options<ListModulesData, ThrowOnError>,
+): RequestResult<ListModulesResponses, unknown, ThrowOnError> =>
+  (options?.client ?? client).get<ListModulesResponses, unknown, ThrowOnError>({
+    url: "/api/v1/modules",
+    ...options,
+  });
 
 /**
  * Bootstrap for the mobile app

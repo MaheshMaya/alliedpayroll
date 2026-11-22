@@ -1,5 +1,7 @@
 import { client } from "@alliedpayroll/api-client/client";
 
+import { defaultLocale } from "@/shared/i18n/locales";
+
 const CSRF_COOKIE = "XSRF-TOKEN";
 const CSRF_HEADER = "X-XSRF-TOKEN";
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
@@ -22,6 +24,9 @@ client.setConfig({
 });
 
 client.interceptors.request.use((request) => {
+  // The API answers in the language the app shows (bootstrap terminology, problem titles),
+  // not in whatever the browser prefers.
+  request.headers.set("Accept-Language", defaultLocale);
   if (!SAFE_METHODS.has(request.method)) {
     const token = readCsrfToken();
     if (token !== null) request.headers.set(CSRF_HEADER, token);

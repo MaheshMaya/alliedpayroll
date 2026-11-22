@@ -11,7 +11,10 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { BootstrapProvider } from "@/shared/data/bootstrap-context";
-import { sentinelBootstrap } from "@/test/bootstrap-fixture";
+import {
+  sentinelBootstrap,
+  staffingTerminology,
+} from "@/test/bootstrap-fixture";
 import { renderWithProviders } from "@/test/render";
 
 import { SideNav } from "./side-nav";
@@ -46,7 +49,7 @@ describe("SideNav", () => {
       "page",
     );
     expect(
-      screen.queryByRole("button", { name: "Clients & sites" }),
+      screen.queryByRole("button", { name: "Clients & Sites" }),
     ).not.toBeInTheDocument();
   });
 
@@ -55,7 +58,7 @@ describe("SideNav", () => {
     renderNav(sentinelBootstrap({ features: { "module:CUSTOMERS": true } }));
 
     const clients = await screen.findByRole("button", {
-      name: "Clients & sites",
+      name: "Clients & Sites",
     });
     const payroll = screen.getByRole("button", { name: "Payroll" });
 
@@ -66,6 +69,25 @@ describe("SideNav", () => {
     await user.click(clients);
     expect(clients).toHaveAttribute("aria-expanded", "true");
     expect(payroll).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("names the group and its pages with the tenant's own words", async () => {
+    const user = userEvent.setup();
+    renderNav(
+      sentinelBootstrap({
+        features: { "module:CUSTOMERS": true },
+        terminology: {
+          ...staffingTerminology,
+          "client.plural": "Principals",
+          "site.plural": "Locations",
+        },
+      }),
+    );
+
+    await user.click(
+      await screen.findByRole("button", { name: "Principals & Locations" }),
+    );
+    expect(screen.getByText("Locations")).toBeVisible();
   });
 
   it("shows Settings only when the API granted the permission", async () => {

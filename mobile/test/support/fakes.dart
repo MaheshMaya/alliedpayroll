@@ -72,6 +72,7 @@ MobileBootstrap bootstrapFixture({
       user: User(subject: 'u-1', displayName: displayName),
       permissions: permissions,
       features: const {'attendance': true},
+      terminology: const {'site': 'Site', 'site.plural': 'Sites'},
     ),
     sync_: SyncPolicy(deltaInterval: 'PT15M', offlinePunchRetention: 'PT168H'),
   );

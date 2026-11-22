@@ -7,5 +7,10 @@ import java.util.UUID;
 
 /** A tenant row was created. Modules that keep per-tenant defaults seed them on this. */
 public record TenantProvisioned(
-    UUID eventId, TenantId tenantId, String slug, String industryProfileCode, Instant occurredAt)
+    UUID eventId,
+    TenantId tenantId,
+    String slug,
+    String industryProfileCode,
+    int templateVersion,
+    Instant occurredAt)
     implements DomainEvent {}

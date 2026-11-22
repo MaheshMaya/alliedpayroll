@@ -8,6 +8,7 @@ import com.alliedpayroll.platform.test.PostgresTestDatabase;
 import com.alliedpayroll.platform.test.TenantTesting;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,14 @@ class RowLevelSecurityTest {
       VALUES (?, ?, ?, true, '{}', 0, ?, platform.system_actor(), ?, platform.system_actor())
       """;
   private static final String COUNT = "SELECT count(*) FROM tenant.feature_flag WHERE flag_key = ?";
+  private static final String INSERT_LABEL =
+      """
+      INSERT INTO tenant.terminology_override (id, tenant_id, concept_key, locale, label, version,
+        created_at, created_by, updated_at, updated_by)
+      VALUES (?, ?, ?, 'en-IN', ?, 0, ?, platform.system_actor(), ?, platform.system_actor())
+      """;
+  private static final String LABELS =
+      "SELECT label FROM tenant.terminology_override WHERE concept_key = ?";
 
   @Autowired private JdbcTemplate jdbc;
   @Autowired private TransactionTemplate transactions;
@@ -78,6 +87,16 @@ class RowLevelSecurityTest {
   }
 
   @Test
+  void eachTenantSeesOnlyItsOwnLabelForTheSameTerm() {
+    String term = "site." + UUID.randomUUID();
+    labelAs(SENTINEL, term, "Gate");
+    labelAs(NIMBUS, term, "Office");
+
+    assertThat(labelsAs(SENTINEL, term)).containsExactly("Gate");
+    assertThat(labelsAs(NIMBUS, term)).containsExactly("Office");
+  }
+
+  @Test
   void applicationRoleCannotDisableRowLevelSecurity() {
     assertThatThrownBy(
             () -> jdbc.execute("ALTER TABLE tenant.feature_flag DISABLE ROW LEVEL SECURITY"))
@@ -98,6 +117,24 @@ class RowLevelSecurityTest {
   private void insert(CurrentTenant owner, String flag) {
     OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
     jdbc.update(INSERT, UUID.randomUUID(), owner.id().value(), flag, now, now);
+  }
+
+  private void labelAs(CurrentTenant tenant, String term, String label) {
+    OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+    TenantTesting.runAs(
+        tenant,
+        () ->
+            transactions.executeWithoutResult(status ->
+                jdbc.update(
+                    INSERT_LABEL, UUID.randomUUID(), tenant.id().value(), term, label, now, now)));
+  }
+
+  private List<String> labelsAs(CurrentTenant tenant, String term) {
+    return TenantTesting.callAs(
+        tenant,
+        () ->
+            Objects.requireNonNull(
+                transactions.execute(status -> jdbc.queryForList(LABELS, String.class, term))));
   }
 
   private int count(String flag) {

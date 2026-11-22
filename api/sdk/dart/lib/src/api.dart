@@ -10,7 +10,9 @@ import 'package:allied_api/src/auth/oauth.dart';
 import 'package:allied_api/src/api/audit_api.dart';
 import 'package:allied_api/src/api/bootstrap_api.dart';
 import 'package:allied_api/src/api/mobile_api.dart';
+import 'package:allied_api/src/api/modules_api.dart';
 import 'package:allied_api/src/api/roles_api.dart';
+import 'package:allied_api/src/api/terminology_api.dart';
 import 'package:allied_api/src/api/users_api.dart';
 import 'package:allied_api/src/api/web_session_api.dart';
 
@@ -155,10 +157,22 @@ class AlliedApi {
     return MobileApi(dio);
   }
 
+  /// Get ModulesApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  ModulesApi getModulesApi() {
+    return ModulesApi(dio);
+  }
+
   /// Get RolesApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
   RolesApi getRolesApi() {
     return RolesApi(dio);
+  }
+
+  /// Get TerminologyApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  TerminologyApi getTerminologyApi() {
+    return TerminologyApi(dio);
   }
 
   /// Get UsersApi instance, base route and serializer can be overridden by a given but be careful,

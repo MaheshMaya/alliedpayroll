@@ -3,16 +3,21 @@ import 'package:allied_api/src/model/bootstrap.dart';
 import 'package:allied_api/src/model/create_role_request.dart';
 import 'package:allied_api/src/model/invite_user_request.dart';
 import 'package:allied_api/src/model/mobile_bootstrap.dart';
+import 'package:allied_api/src/model/module_view.dart';
 import 'package:allied_api/src/model/page_response_audit_event_view.dart';
 import 'package:allied_api/src/model/page_response_user_summary.dart';
 import 'package:allied_api/src/model/permission_definition.dart';
+import 'package:allied_api/src/model/relabel_request.dart';
 import 'package:allied_api/src/model/replace_role_permissions_request.dart';
 import 'package:allied_api/src/model/replace_user_roles_request.dart';
 import 'package:allied_api/src/model/role_ref.dart';
 import 'package:allied_api/src/model/role_view.dart';
 import 'package:allied_api/src/model/session_view.dart';
+import 'package:allied_api/src/model/set_module_request.dart';
 import 'package:allied_api/src/model/sync_policy.dart';
 import 'package:allied_api/src/model/tenant_summary.dart';
+import 'package:allied_api/src/model/term_view.dart';
+import 'package:allied_api/src/model/terminology_view.dart';
 import 'package:allied_api/src/model/update_role_request.dart';
 import 'package:allied_api/src/model/user.dart';
 import 'package:allied_api/src/model/user_detail.dart';
@@ -54,6 +59,8 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'MobileBootstrap':
       return MobileBootstrap.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'ModuleView':
+      return ModuleView.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'PageResponseAuditEventView':
       return PageResponseAuditEventView.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -62,6 +69,9 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'PermissionDefinition':
       return PermissionDefinition.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'RelabelRequest':
+      return RelabelRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'ReplaceRolePermissionsRequest':
       return ReplaceRolePermissionsRequest.fromJson(
@@ -77,10 +87,18 @@ ReturnType deserialize<ReturnType, BaseType>(
       return RoleView.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'SessionView':
       return SessionView.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'SetModuleRequest':
+      return SetModuleRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'SyncPolicy':
       return SyncPolicy.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'TenantSummary':
       return TenantSummary.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'TermView':
+      return TermView.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'TerminologyView':
+      return TerminologyView.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'UpdateRoleRequest':
       return UpdateRoleRequest.fromJson(value as Map<String, dynamic>)

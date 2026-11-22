@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import java.time.Instant;
 import java.util.UUID;
 import org.hibernate.annotations.TenantId;
 
@@ -26,8 +28,42 @@ class FeatureFlagEntity {
   @Column(nullable = false)
   private boolean enabled;
 
+  @Version private long version;
+
+  @Column(name = "created_at", nullable = false)
+  private Instant createdAt;
+
+  @Column(name = "created_by", nullable = false)
+  private UUID createdBy;
+
+  @Column(name = "updated_at", nullable = false)
+  private Instant updatedAt;
+
+  @Column(name = "updated_by", nullable = false)
+  private UUID updatedBy;
+
   protected FeatureFlagEntity() {
     // JPA
+  }
+
+  FeatureFlagEntity(UUID id, String flagKey, boolean enabled, Instant now, UUID actor) {
+    this.id = id;
+    this.flagKey = flagKey;
+    this.enabled = enabled;
+    this.createdAt = now;
+    this.createdBy = actor;
+    this.updatedAt = now;
+    this.updatedBy = actor;
+  }
+
+  void enable(boolean value, Instant now, UUID actor) {
+    this.enabled = value;
+    this.updatedAt = now;
+    this.updatedBy = actor;
+  }
+
+  UUID id() {
+    return id;
   }
 
   String flagKey() {

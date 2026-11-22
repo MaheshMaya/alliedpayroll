@@ -10,6 +10,7 @@ public record Tenant(
     String slug,
     String name,
     String industryProfileCode,
+    int profileTemplateVersion,
     TenantStatus status,
     String defaultLocale,
     List<String> enabledLocales,

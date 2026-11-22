@@ -1,0 +1,26 @@
+{
+  "code": "STAFFING",
+  "version": 1,
+  "name": "Staffing and facility services",
+  "modules": {
+    "CUSTOMERS": true, "CONTRACTS": true, "SHIFTS": true, "BILLING": true, "FIELD_OPS": true,
+    "ORG_UNITS": false, "PROJECTS": false, "TIMESHEETS": false, "INVENTORY": false, "PURCHASE": false
+  },
+  "terminology": {
+    "en-IN": {
+      "site_sub_unit": "Post", "site_sub_unit.plural": "Posts",
+      "work_location": "Site", "work_location.plural": "Sites",
+      "org_unit": "Branch", "org_unit.plural": "Branches"
+    },
+    "hi": {
+      "site_sub_unit": "पोस्ट", "site_sub_unit.plural": "पोस्ट",
+      "work_location": "साइट", "work_location.plural": "साइटें",
+      "org_unit": "शाखा", "org_unit.plural": "शाखाएँ"
+    },
+    "ta": {
+      "site_sub_unit": "போஸ்ட்", "site_sub_unit.plural": "போஸ்ட்கள்",
+      "work_location": "தளம்", "work_location.plural": "தளங்கள்",
+      "org_unit": "கிளை", "org_unit.plural": "கிளைகள்"
+    }
+  }
+}

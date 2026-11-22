@@ -79,7 +79,7 @@ class TenantEntity {
     this.slug = tenant.slug();
     this.name = tenant.name();
     this.industryProfileCode = tenant.industryProfileCode();
-    this.profileTemplateVersion = 1;
+    this.profileTemplateVersion = tenant.profileTemplateVersion();
     this.status = tenant.status();
     this.defaultLocale = tenant.defaultLocale();
     this.enabledLocales = List.copyOf(tenant.enabledLocales());
@@ -98,6 +98,7 @@ class TenantEntity {
         slug,
         name,
         industryProfileCode,
+        profileTemplateVersion,
         status,
         defaultLocale,
         List.copyOf(enabledLocales),

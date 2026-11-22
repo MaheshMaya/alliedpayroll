@@ -1,0 +1,23 @@
+{
+  "code": "CORPORATE",
+  "version": 1,
+  "name": "Corporate and IT services",
+  "modules": {
+    "ORG_UNITS": true, "CUSTOMERS": false, "CONTRACTS": false, "PROJECTS": false, "SHIFTS": false,
+    "TIMESHEETS": false, "BILLING": false, "INVENTORY": false, "PURCHASE": false, "FIELD_OPS": false
+  },
+  "terminology": {
+    "en-IN": {
+      "work_location": "Office", "work_location.plural": "Offices",
+      "duty": "Day", "duty.plural": "Days"
+    },
+    "hi": {
+      "work_location": "कार्यालय", "work_location.plural": "कार्यालय",
+      "duty": "दिन", "duty.plural": "दिन"
+    },
+    "ta": {
+      "work_location": "அலுவலகம்", "work_location.plural": "அலுவலகங்கள்",
+      "duty": "நாள்", "duty.plural": "நாட்கள்"
+    }
+  }
+}

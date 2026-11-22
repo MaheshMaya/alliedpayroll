@@ -27,6 +27,8 @@ class Bootstrap {
     required this.permissions,
 
     required this.features,
+
+    required this.terminology,
   });
 
   @JsonKey(name: r'tenant', required: true, includeIfNull: false)
@@ -41,6 +43,9 @@ class Bootstrap {
   @JsonKey(name: r'features', required: true, includeIfNull: false)
   final Map<String, bool> features;
 
+  @JsonKey(name: r'terminology', required: true, includeIfNull: false)
+  final Map<String, String> terminology;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -48,14 +53,16 @@ class Bootstrap {
           other.tenant == tenant &&
           other.user == user &&
           other.permissions == permissions &&
-          other.features == features;
+          other.features == features &&
+          other.terminology == terminology;
 
   @override
   int get hashCode =>
       tenant.hashCode +
       user.hashCode +
       permissions.hashCode +
-      features.hashCode;
+      features.hashCode +
+      terminology.hashCode;
 
   factory Bootstrap.fromJson(Map<String, dynamic> json) =>
       _$BootstrapFromJson(json);

@@ -30,6 +30,24 @@ export type UserDetail = {
   version: number;
 };
 
+export type RelabelRequest = {
+  labels: {
+    [key: string]: string;
+  };
+};
+
+export type TermView = {
+  key: string;
+  label: string;
+  defaultLabel: string;
+  overridden: boolean;
+};
+
+export type TerminologyView = {
+  locale: string;
+  terms: Array<TermView>;
+};
+
 export type UpdateRoleRequest = {
   name: string;
   description?: string;
@@ -46,6 +64,16 @@ export type RoleView = {
 
 export type ReplaceRolePermissionsRequest = {
   permissions: Array<string>;
+};
+
+export type SetModuleRequest = {
+  enabled: boolean;
+};
+
+export type ModuleView = {
+  code: string;
+  flagKey: string;
+  enabled: boolean;
 };
 
 export type InviteUserRequest = {
@@ -103,6 +131,9 @@ export type Bootstrap = {
   permissions: Array<string>;
   features: {
     [key: string]: boolean;
+  };
+  terminology: {
+    [key: string]: string;
   };
 };
 
@@ -205,6 +236,44 @@ export type ReplaceUserRolesResponses = {
 export type ReplaceUserRolesResponse =
   ReplaceUserRolesResponses[keyof ReplaceUserRolesResponses];
 
+export type GetTerminologyData = {
+  body?: never;
+  path: {
+    locale: string;
+  };
+  query?: never;
+  url: "/api/v1/terminology/{locale}";
+};
+
+export type GetTerminologyResponses = {
+  /**
+   * OK
+   */
+  200: TerminologyView;
+};
+
+export type GetTerminologyResponse =
+  GetTerminologyResponses[keyof GetTerminologyResponses];
+
+export type RelabelTerminologyData = {
+  body: RelabelRequest;
+  path: {
+    locale: string;
+  };
+  query?: never;
+  url: "/api/v1/terminology/{locale}";
+};
+
+export type RelabelTerminologyResponses = {
+  /**
+   * OK
+   */
+  200: TerminologyView;
+};
+
+export type RelabelTerminologyResponse =
+  RelabelTerminologyResponses[keyof RelabelTerminologyResponses];
+
 export type GetRoleData = {
   body?: never;
   path: {
@@ -259,6 +328,24 @@ export type ReplaceRolePermissionsResponses = {
 
 export type ReplaceRolePermissionsResponse =
   ReplaceRolePermissionsResponses[keyof ReplaceRolePermissionsResponses];
+
+export type SetModuleData = {
+  body: SetModuleRequest;
+  path: {
+    code: string;
+  };
+  query?: never;
+  url: "/api/v1/modules/{code}";
+};
+
+export type SetModuleResponses = {
+  /**
+   * OK
+   */
+  200: ModuleView;
+};
+
+export type SetModuleResponse = SetModuleResponses[keyof SetModuleResponses];
 
 export type ListUsersData = {
   body?: never;
@@ -436,6 +523,23 @@ export type ListPermissionsResponses = {
 
 export type ListPermissionsResponse =
   ListPermissionsResponses[keyof ListPermissionsResponses];
+
+export type ListModulesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/api/v1/modules";
+};
+
+export type ListModulesResponses = {
+  /**
+   * OK
+   */
+  200: Array<ModuleView>;
+};
+
+export type ListModulesResponse =
+  ListModulesResponses[keyof ListModulesResponses];
 
 export type GetMobileBootstrapData = {
   body?: never;
