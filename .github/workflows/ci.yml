@@ -36,6 +36,23 @@ jobs:
       - name: Committed OpenAPI document matches the code
         working-directory: .
         run: git diff --exit-code -- api/openapi/backend.json
+      # Failing tests become check-run annotations, which the API serves without a sign-in.
+      - name: Failing tests as annotations
+        if: failure()
+        working-directory: .
+        run: |
+          python3 - <<'EOF'
+          import glob, xml.etree.ElementTree as ET
+          shown = 0
+          for path in sorted(glob.glob("backend/**/build/test-results/test/*.xml", recursive=True)):
+              for case in ET.parse(path).getroot().iter("testcase"):
+                  for failure in list(case.iter("failure")) + list(case.iter("error")):
+                      message = (failure.get("message") or "").splitlines()[0][:400] if failure.get("message") else "failed"
+                      print(f"::error title={case.get('classname')}.{case.get('name')}::{message}")
+                      shown += 1
+                      if shown >= 10:
+                          raise SystemExit(0)
+          EOF
       - name: Test reports
         if: failure()
         uses: actions/upload-artifact@v4
