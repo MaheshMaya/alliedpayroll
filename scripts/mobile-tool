@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Runs one Flutter or Dart command in the mobile-tools compose service. The container entrypoint
+# syncs the Dart sources into its volume, runs the command in MOBILE_DIR (default mobile) and syncs
+# the results back; see scripts/mobile-in-container.sh. Pass --clean first to empty the volume.
+# ALLIED_FLUTTER=host runs the tool on the host instead (CI).
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ "${ALLIED_FLUTTER:-docker}" = "host" ]; then
+  cd "$root/${MOBILE_DIR:-mobile}" && exec "$@"
+fi
+compose_file="$root/docker-compose.yml"
+if command -v cygpath >/dev/null 2>&1; then compose_file="$(cygpath -m "$compose_file")"; fi
+exec docker compose -f "$compose_file" --profile tools run --rm -T \
+  -e MOBILE_DIR="${MOBILE_DIR:-mobile}" mobile-tools "$@"

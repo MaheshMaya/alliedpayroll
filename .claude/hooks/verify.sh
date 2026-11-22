@@ -44,9 +44,10 @@ if [ -f "frontend/package.json" ]; then
 fi
 
 if [ -f "mobile/pubspec.yaml" ]; then
+  # scripts/dart and scripts/flutter run in the mobile-tools container; ALLIED_FLUTTER=host opts out.
   run "mobile format check" \
-    "dart format --output=none --set-exit-if-changed mobile/lib mobile/test"
-  run "mobile analyze" "flutter analyze --no-pub mobile"
+    "scripts/dart format --output=none --set-exit-if-changed lib test"
+  run "mobile analyze" "scripts/flutter analyze"
 fi
 
 if [ "$failed" -ne 0 ]; then

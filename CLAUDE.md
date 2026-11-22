@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Walking skeleton in place (2026-11-07): one Spring Boot backend (`backend/`, Gradle), the React web app (`frontend/`), the design-token build (`design-tokens/`), the generated TypeScript SDK (`api/sdk/typescript/`, built from the committed `api/openapi/backend.json`) and a root `docker-compose.yml` that runs the whole stack. Mobile (`mobile/`) is not scaffolded yet. The first slice, sign in through Keycloak and see Home, is proven end to end. Design reference material is in `reference/`; the initiation document is [docs/PROJECT_INITIATION.md](docs/PROJECT_INITIATION.md).
+Walking skeleton in place (2026-11-07): one Spring Boot backend (`backend/`, Gradle), the React web app (`frontend/`), the design-token build (`design-tokens/`), the generated TypeScript SDK (`api/sdk/typescript/`, built from the committed `api/openapi/backend.json`) and a root `docker-compose.yml` that runs the whole stack. The first slice, sign in through Keycloak and see Home, is proven end to end in the browser. The Flutter app (`mobile/`, scaffolded 2026-11-22) signs in with PKCE through `flutter_appauth`, calls `/api/v1/mobile/bootstrap` through the generated Dart SDK (`api/sdk/dart/`) and is themed from `design-tokens/flutter/`; its sign-in is proven by tests and the APK build, not yet on a device. CI runs on GitHub Actions (`.github/workflows/ci.yml`). Design reference material is in `reference/`; the initiation document is [docs/PROJECT_INITIATION.md](docs/PROJECT_INITIATION.md).
 
 ## Build, lint, test
 
@@ -28,7 +28,15 @@ pnpm web check                                 # all four
 pnpm web dev                                   # :5173, proxies /api /auth /v3 to :8088
 pnpm web storybook                             # :6006
 pnpm web e2e                                   # Playwright; needs `playwright install` once and the compose stack
-pnpm tokens:build                              # design-tokens/build is committed; `pnpm --filter @alliedpayroll/design-tokens check` fails when stale
+pnpm tokens:build                              # design-tokens/build and design-tokens/flutter/lib/src/tokens.g.dart are committed; `pnpm --filter @alliedpayroll/design-tokens check` fails when stale
+
+# mobile (Flutter 3.44 in the mobile-tools container, same volume arrangement as backend-tools; ALLIED_FLUTTER=host opts out)
+scripts/flutter pub get && scripts/flutter gen-l10n && scripts/dart run build_runner build --delete-conflicting-outputs
+scripts/dart format --set-exit-if-changed lib test && scripts/flutter analyze && scripts/dart run custom_lint
+scripts/flutter test                           # widget, unit and golden tests; --update-goldens after an intended change
+scripts/flutter build apk --debug --dart-define-from-file=env/dev.json
+scripts/dart-sdk                               # regenerate api/sdk/dart after backend.json changed (openapi-generator image + build_runner)
+MOBILE_DIR=design-tokens/flutter scripts/flutter test   # the allied_tokens package
 
 # whole stack
 docker compose up --build                      # postgres, redis, keycloak (+seed), backend-api, backend-batch, web

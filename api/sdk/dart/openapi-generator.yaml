@@ -1,0 +1,12 @@
+# openapi-generator dart-dio settings for the Flutter app's API client. Run scripts/dart-sdk.
+pubName: allied_api
+pubDescription: Dart client generated from api/openapi/backend.json. Never edited by hand.
+pubVersion: 0.0.0
+serializationLibrary: json_serializable
+useEnumExtension: true
+enumUnknownDefaultCase: true
+globalProperties:
+  apiDocs: "false"
+  modelDocs: "false"
+  apiTests: "false"
+  modelTests: "false"

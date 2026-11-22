@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Dart for mobile/ (or MOBILE_DIR), inside the toolchain container.
+#   scripts/dart format --set-exit-if-changed lib test
+#   MOBILE_DIR=api/sdk/dart scripts/dart run build_runner build --delete-conflicting-outputs
+exec "$(dirname "${BASH_SOURCE[0]}")/mobile-tool" dart "$@"

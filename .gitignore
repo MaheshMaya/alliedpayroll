@@ -37,6 +37,10 @@ mobile/build/
 mobile/.flutter-plugins*
 mobile/**/*.g.dart
 mobile/**/*.freezed.dart
+mobile/android/.gradle/
+api/sdk/dart/.dart_tool/
+api/sdk/dart/build/
+design-tokens/flutter/.dart_tool/
 
 # Docker volumes and local data
 .data/

@@ -145,8 +145,29 @@ services:
       - backend-work:/build
       - /var/run/docker.sock:/var/run/docker.sock
 
+  # Flutter and Dart for mobile/, api/sdk/dart and design-tokens/flutter:
+  #   scripts/flutter analyze      scripts/flutter test      scripts/dart-sdk
+  # Same volume arrangement as backend-tools: sources synced into mobile-work, pub and Gradle caches kept.
+  mobile-tools:
+    profiles: [tools]
+    image: ghcr.io/cirruslabs/flutter:3.44.0
+    working_dir: /work
+    entrypoint: ["bash", "/work/scripts/mobile-in-container.sh"]
+    command: ["flutter", "--version"]
+    environment:
+      PUB_CACHE: /pub-cache
+      GRADLE_USER_HOME: /gradle-home
+      MOBILE_DIR: mobile
+    volumes:
+      - .:/work
+      - pub-cache:/pub-cache
+      - gradle-home:/gradle-home
+      - mobile-work:/build
+
 volumes:
   pgdata:
   keycloak-data:
   gradle-home:
   backend-work:
+  pub-cache:
+  mobile-work:

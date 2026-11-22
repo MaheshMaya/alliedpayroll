@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Flutter for mobile/ (or MOBILE_DIR), inside the toolchain container; the host needs only Docker.
+#   scripts/flutter analyze
+#   MOBILE_DIR=design-tokens/flutter scripts/flutter test
+exec "$(dirname "${BASH_SOURCE[0]}")/mobile-tool" flutter "$@"

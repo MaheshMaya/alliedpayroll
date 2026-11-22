@@ -1,0 +1,4 @@
+# Generated code is checked for errors only; style lints apply to code we write.
+analyzer:
+  errors:
+    todo: ignore

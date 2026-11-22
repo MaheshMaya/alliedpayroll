@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Regenerates the Dart API client in api/sdk/dart from the committed OpenAPI document, then runs
+# build_runner for the serializers and formats the result. Both steps run in containers.
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+mount="$root"
+if command -v cygpath >/dev/null 2>&1; then mount="$(cygpath -m "$root")"; fi
+
+generator_image=openapitools/openapi-generator-cli:v7.27.0
+out=api/sdk/dart
+
+# Generated sources are replaced wholesale; the hand-maintained files are listed in .openapi-generator-ignore.
+if [ -n "${OPENAPI_GENERATOR_JAR:-}" ]; then
+  java -jar "$OPENAPI_GENERATOR_JAR" generate \
+    -i "$root/api/openapi/backend.json" -g dart-dio -c "$root/$out/openapi-generator.yaml" -o "$root/$out"
+else
+  MSYS_NO_PATHCONV=1 docker run --rm -v "$mount:/local" "$generator_image" generate \
+    -i /local/api/openapi/backend.json \
+    -g dart-dio \
+    -c /local/$out/openapi-generator.yaml \
+    -o /local/$out
+fi
+
+# dart-dio writes Markdown and test stubs whatever the global properties say; nothing reads them.
+rm -rf "$root/$out/doc" "$root/$out/test"
+
+# The generator's pubspec template predates the Dart version json_serializable now emits code for.
+sed -i -e "s/^  sdk: .*/  sdk: ^3.12.0/" -e "/^homepage: homepage$/d" "$root/$out/pubspec.yaml"
+
+MOBILE_DIR="$out" "$root/scripts/dart" pub get
+MOBILE_DIR="$out" "$root/scripts/dart" run build_runner build --delete-conflicting-outputs
+MOBILE_DIR="$out" "$root/scripts/dart" format .

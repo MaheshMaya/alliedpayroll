@@ -8,15 +8,15 @@ Payroll and workforce management for Indian staffing, facility-management and fi
 |---|---|
 | `backend/` | The single Spring Boot application: platform libraries, one Modulith module per bounded context, channel modules. Gradle Kotlin DSL. |
 | `frontend/` | React 19 + TypeScript + Vite web app for admins, payroll and HR staff. |
-| `mobile/` | Flutter app: employee, manager and kiosk modes. |
+| `mobile/` | Flutter app: employee, manager and kiosk modes. Dart API client in `api/sdk/dart/`. |
 | `design-tokens/` | DTCG tokens (`tokens.json`) and the Style Dictionary build that feeds web and mobile themes. |
 | `docs/` | Requirements, architecture decisions (`docs/adr`), schema design (`docs/schema`), plans. |
 | `docker-compose.yml` | The whole local stack: PostgreSQL, Keycloak, Redis, backend-api, backend-batch, web. |
 
 ## Prerequisites
 
-- JDK 25 (Temurin), Node 22 with pnpm 12, Docker Compose (Rancher Desktop with the moby engine works).
-- Flutter stable for `mobile/`.
+- Node 22 with pnpm 12 and Docker Compose (Rancher Desktop with the moby engine works).
+- No JDK, Gradle, Flutter or Android SDK on the host: `scripts/gradle`, `scripts/flutter` and `scripts/dart` run them in toolchain containers.
 
 ## Run everything
 
@@ -43,6 +43,7 @@ Checks that must be green before a commit (the pre-commit hook runs the fast one
 scripts/gradle spotlessCheck compileJava compileTestJava test
 pnpm web typecheck && pnpm web lint && pnpm web test -- --run
 pnpm tokens:build
+scripts/flutter analyze && scripts/flutter test
 ```
 
 Conventions: Conventional Commits, Google Java Style, `strictTypeChecked` TypeScript, Effective Dart. See `CLAUDE.md` and `docs/adr/0002-coding-conventions.md`.

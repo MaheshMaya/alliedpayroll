@@ -1,0 +1,6 @@
+# Files the generator must not overwrite.
+openapi-generator.yaml
+.openapi-generator-ignore
+.gitignore
+analysis_options.yaml
+README.md

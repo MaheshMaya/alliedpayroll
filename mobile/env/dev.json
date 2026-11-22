@@ -1,0 +1,9 @@
+{
+  "FLAVOR": "dev",
+  "API_SCHEME": "http",
+  "API_DOMAIN": "localhost:8088",
+  "OIDC_ISSUER": "http://auth.localhost:8081/realms/alliedpayroll",
+  "OIDC_CLIENT_ID": "alliedpayroll-mobile",
+  "OIDC_REDIRECT_URI": "com.alliedpayroll.app://callback",
+  "APP_VERSION": "0.1.0-dev"
+}

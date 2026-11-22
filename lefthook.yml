@@ -12,6 +12,9 @@ pre-commit:
       root: "frontend/"
       glob: "*.{ts,tsx,css,json,md}"
       run: pnpm exec prettier --check {staged_files}
+    mobile-format:
+      glob: "mobile/**/*.dart"
+      run: scripts/dart format --output=none --set-exit-if-changed lib test
     tokens-fresh:
       glob: "design-tokens/**/*"
       run: pnpm --filter @alliedpayroll/design-tokens check

@@ -1,0 +1,45 @@
+{
+  "@@locale": "en",
+  "appTitle": "Allied Payroll",
+  "signInIntro": "Enter your organisation's workspace code, then sign in with your work account.",
+  "workspaceLabel": "Workspace code",
+  "workspaceHint": "for example: sentinel",
+  "workspaceInvalid": "Use lower-case letters, digits and hyphens only.",
+  "signIn": "Sign in",
+  "signInFailed": "Sign-in did not complete. Check the workspace code and your connection, then try again.",
+  "signOut": "Sign out",
+  "kioskSetupLink": "Set up this device as a kiosk",
+  "kioskSetupTitle": "Kiosk setup",
+  "kioskSetupBody": "Device enrolment is not available yet. Your administrator will issue an enrolment QR code once it is.",
+  "kioskScanQr": "Scan enrolment QR",
+  "homeGreeting": "Hello, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "modeEmployee": "Employee",
+  "modeManager": "Supervisor",
+  "syncTitle": "Sync",
+  "syncEvery": "Refreshes every {minutes} minutes",
+  "@syncEvery": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineRetention": "Offline punches are kept for {days} days",
+  "@offlineRetention": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "homeEmptyHint": "Attendance, payslips and your team arrive here as those features ship.",
+  "loadFailed": "Could not load your workspace.",
+  "retry": "Try again"
+}

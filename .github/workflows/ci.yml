@@ -75,11 +75,59 @@ jobs:
         if: github.event_name == 'pull_request'
         run: pnpm exec commitlint --from "${{ github.event.pull_request.base.sha }}" --to "${{ github.event.pull_request.head.sha }}" --verbose
 
+  mobile:
+    name: Mobile (format, analyze, tests, APK, Dart SDK contract)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ALLIED_FLUTTER: host
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.0"
+          cache: true
+      - name: Generated Dart SDK matches the committed OpenAPI document
+        run: |
+          curl -sSL -o /tmp/openapi-generator-cli.jar https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.27.0/openapi-generator-cli-7.27.0.jar
+          OPENAPI_GENERATOR_JAR=/tmp/openapi-generator-cli.jar scripts/dart-sdk
+          git diff --exit-code -- api/sdk/dart
+      - name: Design tokens Flutter package
+        run: |
+          MOBILE_DIR=design-tokens/flutter scripts/flutter pub get
+          MOBILE_DIR=design-tokens/flutter scripts/flutter analyze
+          MOBILE_DIR=design-tokens/flutter scripts/flutter test
+      - name: Generate (l10n, Riverpod)
+        run: |
+          scripts/flutter pub get
+          scripts/flutter gen-l10n
+          scripts/dart run build_runner build --delete-conflicting-outputs
+      - name: Format, analyze, custom lints
+        run: |
+          scripts/dart format --output=none --set-exit-if-changed lib test
+          scripts/flutter analyze
+          scripts/dart run custom_lint
+      - name: Unit, widget and golden tests
+        run: scripts/flutter test
+      - name: Debug APK
+        run: scripts/flutter build apk --debug --dart-define-from-file=env/dev.json
+      - name: Golden failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-golden-failures
+          path: mobile/test/**/failures/
+          if-no-files-found: ignore
+
   images:
     name: Docker images build
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    needs: [backend, web]
+    needs: [backend, web, mobile]
     steps:
       - uses: actions/checkout@v5
       - uses: docker/setup-buildx-action@v3

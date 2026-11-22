@@ -1,0 +1,9 @@
+{
+  "FLAVOR": "staging",
+  "API_SCHEME": "https",
+  "API_DOMAIN": "api.staging.alliedpayroll.example",
+  "OIDC_ISSUER": "https://auth.staging.alliedpayroll.example/realms/alliedpayroll",
+  "OIDC_CLIENT_ID": "alliedpayroll-mobile",
+  "OIDC_REDIRECT_URI": "com.alliedpayroll.app://callback",
+  "APP_VERSION": "0.1.0"
+}
